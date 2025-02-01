@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import Papa from "papaparse";
-import { Button, Container, Typography, Box } from "@mui/material";
+import { Button, Container, Typography, Box, AppBar, Toolbar, IconButton } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import AssignLeadModal from "../leadModal/AssignLeadModal";
+import MenuIcon from '@mui/icons-material/Menu';
+import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
+  const [open, setOpen] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
 
@@ -34,6 +37,10 @@ const Dashboard = () => {
     setShowAssignModal(true);
   };
 
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
   const columns = [
     { accessorKey: "name", header: "Name" },
     { accessorKey: "email", header: "Email" },
@@ -42,7 +49,19 @@ const Dashboard = () => {
 
   return (
     <Container>
-      <Box sx={{ my: 4 }}>
+      <Box sx={{ my: 4,display:'flex' }}>
+        <Sidebar open={open} toggleDrawer={toggleDrawer} />
+        <AppBar position="fixed">
+          <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={toggleDrawer} sx={{ mr: 2 }}>
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              Dashboard
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Dashboard
         </Typography>
@@ -70,6 +89,7 @@ const Dashboard = () => {
             onClose={() => setShowAssignModal(false)}
           />
         )}
+        </Box>
       </Box>
     </Container>
   );
