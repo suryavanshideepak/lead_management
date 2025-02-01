@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import {  Container, Typography, TextField, Button } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { validationSchema } from '../../utils/validation';
 import Toaster from '../../containers/Toaster';
@@ -9,19 +9,18 @@ const LoginPage = () => {
   const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
   const navigate = useNavigate();
 
-
   const handleLogin = (values) => {
     const { userName, password } = values;
     if (userName === 'admin' && password === 'password') {
-      setToast({open:true, message:"Login successfully"})
+      setToast({ open: true, message: "Login successfully" });
       navigate('/dashboard');
     } else {
-      setToast({open:true, message:"Something went wrong",severity:'error'})
+      setToast({ open: true, message: "Something went wrong", severity: 'error' });
     }
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ padding: { xs: '16px', sm: '24px' } }}> 
       <Typography variant="h4" gutterBottom>
         Welcome Back
       </Typography>
@@ -58,9 +57,10 @@ const LoginPage = () => {
               type="submit"
               fullWidth
               size="large"
-              style={{
+              sx={{
                 marginTop: '20px',
                 backgroundImage: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)',
+                fontSize: { xs: '14px', sm: '16px' }, // Adjust button size on small screens
               }}
             >
               Login
