@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextField, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import { validationSchema } from '../../utils/validation';
+import Toaster from '../../containers/Toaster';
 
 const LoginPage = () => {
+  const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
   const navigate = useNavigate();
+
 
   const handleLogin = (values) => {
     const { userName, password } = values;
     if (userName === 'admin' && password === 'password') {
+      setToast({open:true, message:"Login successfully"})
       navigate('/dashboard');
     } else {
-      alert('Invalid credentials');
+      setToast({open:true, message:"Something went wrong",severity:'error'})
     }
   };
 
@@ -64,6 +68,12 @@ const LoginPage = () => {
           </Form>
         )}
       </Formik>
+      <Toaster
+        message={toast.message}
+        open={toast.open}
+        severity={toast.severity}
+        onClose={() => setToast({ ...toast, open: false })}
+      />
     </Container>
   );
 };
