@@ -49,7 +49,7 @@ const Dashboard = () => {
 
   return (
     <Container>
-      <Box sx={{ my: 4,display:'flex' }}>
+      <Box sx={{ my: 1,display:'flex' }}>
         <Sidebar open={open} toggleDrawer={toggleDrawer} />
         <AppBar position="fixed">
           <Toolbar>

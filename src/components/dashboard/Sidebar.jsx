@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 
 const Sidebar = ({ open, toggleDrawer }) => {
   return (
-    <Drawer anchor="left" open={open} onClose={toggleDrawer}>
-      <List sx={{ width: 250 }}>
+    <Drawer anchor="left" open={open} onClose={toggleDrawer} >
+      <List sx={{ width: 250 ,backgroundImage: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)'}}>
         <ListItem button component={Link} to="/dashboard">
           <ListItemIcon><Dashboard /></ListItemIcon>
           <ListItemText primary="Dashboard" />
