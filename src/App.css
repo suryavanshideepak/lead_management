@@ -1,6 +1,12 @@
 .App {
   text-align: center;
 }
+.table {
+  width:'95%';
+  display:'block';
+  overflow-x:'auto';
+  overflow-y:'auto';
+  }
 
 .App-logo {
   height: 40vmin;
