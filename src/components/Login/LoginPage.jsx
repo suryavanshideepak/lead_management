@@ -3,18 +3,28 @@ import { useNavigate } from 'react-router-dom';
 import {  Container, Typography, TextField, Button } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { validationSchema } from '../../utils/validation';
+import { loginAction } from '../../app/auth/authSlice'
 import Toaster from '../../containers/Toaster';
+import { useDispatch } from 'react-redux';
 
 const LoginPage = () => {
   const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const handleLogin = (values) => {
     const { userName, password } = values;
-    if (userName === 'admin' && password === 'password') {
-      setToast({ open: true, message: "Login successfully" });
-      navigate('/dashboard');
-    } else {
+    if(userName && password){
+      const payload = {
+        email:userName,
+        password:password
+      }
+      dispatch(loginAction(payload)).unwrap().then(() => {
+        setToast({ open: true, message: "Login successfully" });
+        navigate('/dashboard');
+      }).catch((err) => setToast({ open: true, message: "Something went wrong", severity: 'error' })
+    )        
+    }else{
       setToast({ open: true, message: "Something went wrong", severity: 'error' });
     }
   };
