@@ -2,8 +2,11 @@ import React from 'react';
 import { Box } from '@mui/material';
 import LoginBackground from './LoginBackground'; 
 import LoginPage from './LoginPage';
+import { useSelector } from 'react-redux';
+import ForgotPassword from './ForgotPassword';
 
 const Login = () => {
+  const {isForgotPass} = useSelector(state=> state.user)
   return (
     <Box
       sx={{
@@ -22,7 +25,7 @@ const Login = () => {
           height: '100vh',
         }}
       >
-        <LoginPage />
+        {isForgotPass ? <ForgotPassword/> : <LoginPage />}
       </Box>
     </Box>
   );

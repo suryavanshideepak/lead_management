@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {  Container, Typography, TextField, Button } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import {  Container, Typography, TextField, Button, Box } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { validationSchema } from '../../utils/validation';
 import { loginAction } from '../../app/auth/authSlice'
 import Toaster from '../../containers/Toaster';
 import { useDispatch } from 'react-redux';
+import { handleForgot } from '../../app/users/userSlice';
 
 const LoginPage = () => {
   const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
@@ -78,6 +79,10 @@ const LoginPage = () => {
           </Form>
         )}
       </Formik>
+      <Box paddingTop={3}>
+        <Link onClick={() => dispatch(handleForgot(true))}>Forgot password ?</Link>
+      </Box>
+
       <Toaster
         message={toast.message}
         open={toast.open}

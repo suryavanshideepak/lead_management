@@ -80,7 +80,7 @@ const Dashboard = () => {
       </AppBar>
         <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <input type="file" accept=".csv" onChange={handleFileUpload} />
-        <Button variant="contained" onClick={handleExport} sx={{ ml: 2 }}>
+        <Button variant="contained" onClick={handleExport} sx={{ ml: 2,background: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)', }}>
           Export Leads
         </Button>
         <MaterialReactTable
