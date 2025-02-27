@@ -4,9 +4,14 @@ import axios from "axios";
 
 export const loginAction = createAsyncThunk(
     'user/login',
-    async(payload) => {
-        const response = await axios.post('http://localhost:4500/user/login',payload)
-        return response.data
+    async(payload, { rejectWithValue }) => {
+        try{
+            const response = await axios.post('http://localhost:4500/user/login',payload)
+            return response.data
+        }catch(err){
+            return rejectWithValue(err.response?.data || err.message);
+        }
+        
     }
 )
 

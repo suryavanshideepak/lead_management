@@ -23,7 +23,7 @@ const LoginPage = () => {
       dispatch(loginAction(payload)).unwrap().then(() => {
         setToast({ open: true, message: "Login successfully" });
         navigate('/dashboard');
-      }).catch((err) => setToast({ open: true, message: "Something went wrong", severity: 'error' })
+      }).catch((err) => setToast({ open: true, message: err.message || "Something went wrong", severity: 'error' })
     )        
     }else{
       setToast({ open: true, message: "Something went wrong", severity: 'error' });
