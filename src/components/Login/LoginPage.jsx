@@ -7,6 +7,7 @@ import { loginAction } from '../../app/auth/authSlice'
 import Toaster from '../../containers/Toaster';
 import { useDispatch } from 'react-redux';
 import { handleForgot } from '../../app/users/userSlice';
+import Logo from '../../assets/logo.webp'
 
 const LoginPage = () => {
   const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
@@ -31,7 +32,10 @@ const LoginPage = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ padding: { xs: '16px', sm: '24px' } }}> 
+    <Container maxWidth="sm" sx={{ padding: { xs: '16px', sm: '24px' } }}>
+      <Box  paddingBottom={5} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+        <img src={Logo} alt='logo_image' width={'130px'} height={'130px'}/>
+      </Box> 
       <Typography variant="h4" gutterBottom>
         Welcome Back
       </Typography>
