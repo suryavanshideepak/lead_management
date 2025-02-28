@@ -4,6 +4,7 @@ import { Dashboard, Settings, Logout, Close } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { logoutAction } from '../../app/auth/authSlice';
 import { useDispatch } from 'react-redux';
+import Logo from '../../assets/logo.webp';
 
 const Sidebar = ({ open, toggleDrawer }) => {
   const dispatch = useDispatch();
@@ -26,7 +27,8 @@ const Sidebar = ({ open, toggleDrawer }) => {
           width: open ? 250 : 56,
           boxSizing: 'border-box',
           transition: 'width 0.3s ease',
-          backgroundImage: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)',
+          border: '1px solid lightgrey',
+          backgroundColor:'#32de84'
         },
       }}
     >
@@ -39,7 +41,10 @@ const Sidebar = ({ open, toggleDrawer }) => {
       >
         {/* Close Button */}
         {open && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, borderBottom:'1px solid lightgrey' }}>
+            <Box>
+              <img src={Logo} alt='logo_image' height={'70px'}/>
+            </Box>
             <IconButton onClick={toggleDrawer} sx={{ color: '#fff' }}>
               <Close />
             </IconButton>
