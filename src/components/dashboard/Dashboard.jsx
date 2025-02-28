@@ -6,7 +6,7 @@ import { MaterialReactTable } from "material-react-table";
 import AssignLeadModal from "../leadModal/AssignLeadModal";
 import MenuIcon from '@mui/icons-material/Menu';
 import Sidebar from "./Sidebar";
-import '../../App.css'
+import '../../App.css';
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
@@ -50,10 +50,16 @@ const Dashboard = () => {
   ];
 
   return (
-    <Container>
-      <Box sx={{ my: 1,display:'flex' }}>
-        <Sidebar open={open} toggleDrawer={toggleDrawer} />
-        <AppBar position="fixed">
+    <Box sx={{ display: 'flex' }}>
+      <Sidebar open={open} toggleDrawer={toggleDrawer} />
+      <AppBar
+        position="fixed"
+        sx={{
+          width: open ? `calc(100% - 250px)` : `calc(100% - 56px)`,
+          ml: open ? '250px' : '56px',
+          transition: 'width 0.3s ease, margin 0.3s ease',
+        }}
+      >
         <Toolbar sx={{ backgroundColor: "white", color: "black", display: "flex", justifyContent: "space-between" }}>
           <Box display="flex" alignItems="center">
             <IconButton edge="start" color="inherit" onClick={toggleDrawer} sx={{ mr: 2 }}>
@@ -71,16 +77,25 @@ const Dashboard = () => {
               </Badge>
             </IconButton>
 
-            <IconButton  color="inherit">
+            <IconButton color="inherit">
               <Avatar sx={{ width: 28, height: 28 }}>A</Avatar>
             </IconButton>
-
           </Box>
         </Toolbar>
       </AppBar>
-        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          mt: 8,
+          width: open ? `calc(100% - 250px)` : `calc(100% - 56px)`,
+          ml: open ? '250px' : '56px',
+          transition: 'width 0.3s ease, margin 0.3s ease',
+        }}
+      >
         <input type="file" accept=".csv" onChange={handleFileUpload} />
-        <Button variant="contained" onClick={handleExport} sx={{ ml: 2,background: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)', }}>
+        <Button variant="contained" onClick={handleExport} sx={{ ml: 2, background: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)', }}>
           Export Leads
         </Button>
         <MaterialReactTable
@@ -103,9 +118,8 @@ const Dashboard = () => {
             onClose={() => setShowAssignModal(false)}
           />
         )}
-        </Box>
       </Box>
-    </Container>
+    </Box>
   );
 };
 

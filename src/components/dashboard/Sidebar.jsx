@@ -16,35 +16,48 @@ const Sidebar = ({ open, toggleDrawer }) => {
   };
 
   return (
-    <Drawer anchor="left" open={open} onClose={toggleDrawer}>
+    <Drawer
+      variant="permanent"
+      open={open}
+      sx={{
+        width: open ? 250 : 56,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: open ? 250 : 56,
+          boxSizing: 'border-box',
+          transition: 'width 0.3s ease',
+          backgroundImage: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)',
+        },
+      }}
+    >
       <Box
         sx={{
-          width: 250,
-          height: '100%',
-          backgroundImage: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)',
           display: 'flex',
           flexDirection: 'column',
+          height: '100%',
         }}
       >
         {/* Close Button */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
-          <IconButton onClick={toggleDrawer} sx={{ color: '#fff' }}>
-            <Close />
-          </IconButton>
-        </Box>
+        {open && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+            <IconButton onClick={toggleDrawer} sx={{ color: '#fff' }}>
+              <Close />
+            </IconButton>
+          </Box>
+        )}
 
         <List>
           <ListItem button component={Link} to="/dashboard">
             <ListItemIcon><Dashboard sx={{ color: '#fff' }} /></ListItemIcon>
-            <ListItemText primary="Dashboard" sx={{ color: '#fff' }} />
+            {open && <ListItemText primary="Dashboard" sx={{ color: '#fff' }} />}
           </ListItem>
           <ListItem button>
             <ListItemIcon><Settings sx={{ color: '#fff' }} /></ListItemIcon>
-            <ListItemText primary="Settings" sx={{ color: '#fff' }} />
+            {open && <ListItemText primary="Settings" sx={{ color: '#fff' }} />}
           </ListItem>
           <ListItem button component={Link} to="/">
             <ListItemIcon><Logout sx={{ color: '#fff' }} onClick={handleLogout} /></ListItemIcon>
-            <ListItemText primary="Logout" sx={{ color: '#fff' }} />
+            {open && <ListItemText primary="Logout" sx={{ color: '#fff' }} />}
           </ListItem>
         </List>
       </Box>
