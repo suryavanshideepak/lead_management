@@ -1,6 +1,6 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Box } from '@mui/material';
-import { Dashboard, Settings, Logout, Close } from '@mui/icons-material';
+import { Dashboard,PersonRounded, Settings, Logout, Close } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { logoutAction } from '../../app/auth/authSlice';
 import { useDispatch } from 'react-redux';
@@ -55,6 +55,10 @@ const Sidebar = ({ open, toggleDrawer }) => {
           <ListItem button component={Link} to="/dashboard">
             <ListItemIcon><Dashboard sx={{ color: '#fff' }} /></ListItemIcon>
             {open && <ListItemText primary="Dashboard" sx={{ color: '#fff' }} />}
+          </ListItem>
+          <ListItem button component={Link} to="/users">
+            <ListItemIcon><PersonRounded sx={{ color: '#fff' }} /></ListItemIcon>
+            {open && <ListItemText primary="Users" sx={{ color: '#fff' }} />}
           </ListItem>
           <ListItem button>
             <ListItemIcon><Settings sx={{ color: '#fff' }} /></ListItemIcon>
