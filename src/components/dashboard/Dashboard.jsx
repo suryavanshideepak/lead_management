@@ -6,7 +6,7 @@ import Navbar from "../nav/Navbar";
 import UserSalesChart from "./UserSalesChart";
 import SalesChart from "./SalesChart";
 
-const Dashboard = () => {
+const Dashboard = ({title}) => {
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = () => {
@@ -16,7 +16,7 @@ const Dashboard = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <Sidebar open={open} toggleDrawer={toggleDrawer} />
-      <Navbar open={open} toggle={toggleDrawer}/>
+      <Navbar title={"Dashboard"} open={open} toggle={toggleDrawer}/>
       <UserSalesChart />
       <SalesChart/>
     </Box>

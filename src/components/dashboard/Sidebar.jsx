@@ -1,6 +1,7 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Box } from '@mui/material';
 import { Dashboard,PersonRounded, Settings, Logout, Close } from '@mui/icons-material';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import { Link, useNavigate } from 'react-router-dom';
 import { logoutAction } from '../../app/auth/authSlice';
 import { useDispatch } from 'react-redux';
@@ -37,6 +38,7 @@ const Sidebar = ({ open, toggleDrawer }) => {
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
+          overflow:'hidden'
         }}
       >
         {/* Close Button */}
@@ -59,6 +61,10 @@ const Sidebar = ({ open, toggleDrawer }) => {
           <ListItem button component={Link} to="/users">
             <ListItemIcon><PersonRounded sx={{ color: '#fff' }} /></ListItemIcon>
             {open && <ListItemText primary="Users" sx={{ color: '#fff' }} />}
+          </ListItem>
+          <ListItem button component={Link} to="/leads">
+            <ListItemIcon><LeaderboardIcon sx={{ color: '#fff' }} /></ListItemIcon>
+            {open && <ListItemText primary="Leads" sx={{ color: '#fff' }} />}
           </ListItem>
           <ListItem button>
             <ListItemIcon><Settings sx={{ color: '#fff' }} /></ListItemIcon>

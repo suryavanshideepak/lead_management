@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import API from "../axios_interceptor/axiosInstance";
 
 export const forgotPassword = createAsyncThunk(
     'user/forgotPassword',
@@ -13,8 +14,20 @@ export const forgotPassword = createAsyncThunk(
     }
 );
 
+export const getAllUser = createAsyncThunk(
+    'user/getAllUser',async(_,{rejectWithValue}) => {
+        try {
+            const response = await API.get('http://localhost:4500/user/getAllUser');
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data || err.message);
+        }
+    }
+)
+
 const initialState = {
-    isForgotPass:false
+    isForgotPass:false,
+    allUsers:[]
 }
 
 export const userSlice = createSlice({
@@ -33,9 +46,12 @@ export const userSlice = createSlice({
         builder.addCase(forgotPassword.fulfilled,(state, action) => {
             state.isForgotPass = false
         })
+        builder.addCase(getAllUser.fulfilled,(state, action) => {
+            state.allUsers = action?.payload
+        })
     }
 })
 
 export const { handleForgot } = userSlice.actions;
-export const selectUserState = (state) => state.user
+export const selectUserState = (state) => state?.user
 export default userSlice.reducer;

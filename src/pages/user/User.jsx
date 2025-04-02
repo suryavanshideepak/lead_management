@@ -1,11 +1,16 @@
 import { Box, Button, Paper, Typography, useTheme } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/dashboard/Sidebar';
 import Navbar from '../../components/nav/Navbar';
 import { MaterialReactTable } from 'material-react-table';
 import AddUserModal from '../../components/Modals/AddUserModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllUser } from '../../app/users/userSlice';
 
 const User = () => {
+  const dispatch = useDispatch()
+  const { allUsers } = useSelector((state) => state.user)
+
   const [leads, setLeads] = useState([
     { id: 1, name: 'John Doe', email: 'john@example.com', phone: '555-1234', status: 'Active' },
     { id: 2, name: 'Jane Smith', email: 'jane@example.com', phone: '555-5678', status: 'Inactive' },
@@ -41,6 +46,9 @@ const User = () => {
     };
     setLeads([...leads, newUserWithId]);
   }
+  useEffect(() => {
+    dispatch(getAllUser())
+  },[])
 
   const columns = [
     { 
@@ -58,11 +66,6 @@ const User = () => {
       Cell: ({ cell }) => (
         <Typography color="textSecondary">{cell.getValue()}</Typography>
       )
-    },
-    { 
-      accessorKey: "phone", 
-      header: "Phone",
-      size: 120
     },
     { 
       accessorKey: "status",
@@ -95,10 +98,12 @@ const User = () => {
     },
   ];
 
+
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Sidebar open={open} toggleDrawer={toggleDrawer} />
-      <Navbar open={open} toggle={toggleDrawer}/>
+      <Navbar title={'User Management'} open={open} toggle={toggleDrawer}/>
       <Box
         component="main"
         sx={{
@@ -149,7 +154,7 @@ const User = () => {
           
           <MaterialReactTable
             columns={columns}
-            data={leads}
+            data={allUsers?.users?.length ? allUsers.users: []}
             enableRowActions
             positionActionsColumn="last"
             muiTablePaperProps={{
@@ -157,14 +162,13 @@ const User = () => {
               sx: {
                 border: `1px solid ${theme.palette.divider}`,
                 borderRadius: 2,
-                // overflow: 'hidden',
                 overflowY: 'auto',
                 overflowX: 'auto'
               }
             }}
             muiTableHeadCellProps={{
               sx: {
-                backgroundColor: theme.palette.grey[50],
+                backgroundColor: '#d3d3d3',
                 fontWeight: '600',
                 color: theme.palette.text.primary,
                 borderBottom: `1px solid ${theme.palette.divider}`,

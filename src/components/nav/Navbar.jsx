@@ -3,7 +3,7 @@ import { Notifications as NotificationsIcon } from "@mui/icons-material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react'
 
-const Navbar = ({open,toggle}) => {
+const Navbar = ({open,toggle,title=""}) => {
     
     const toggleDrawer = () => {
         toggle()
@@ -24,7 +24,7 @@ const Navbar = ({open,toggle}) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              Dashboard
+              {title}
             </Typography>
           </Box>
 
