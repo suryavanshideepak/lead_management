@@ -1,36 +1,30 @@
-import { Box, Button, Paper, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { Box, Button, IconButton, Paper, Typography, useTheme } from '@mui/material';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Sidebar from '../../components/dashboard/Sidebar';
 import Navbar from '../../components/nav/Navbar';
 import { MaterialReactTable } from 'material-react-table';
 import AddUserModal from '../../components/Modals/AddUserModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUser } from '../../app/users/userSlice';
+import { addUser, getAllUser, removeUser } from '../../app/users/userSlice';
+import Toaster from '../../containers/Toaster';
+import ViewInfoModal from '../../components/Modals/ViewInfoModal';
 
 const User = () => {
   const dispatch = useDispatch()
   const { allUsers } = useSelector((state) => state.user)
-
-  const [leads, setLeads] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', phone: '555-1234', status: 'Active' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', phone: '555-5678', status: 'Inactive' },
-    { id: 3, name: 'Robert Johnson', email: 'robert@example.com', phone: '555-9012', status: 'Active' },
-    { id: 4, name: 'Emily Davis', email: 'emily@example.com', phone: '555-3456', status: 'Pending' },
-  ]);
+  const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
   
   const [open, setOpen] = useState(false);
-  const [showAssignModal, setShowAssignModal] = useState(false);
-  const [selectedLead, setSelectedLead] = useState(null);
+  const [isRefresh, setIsRefresh] = useState(false)
+  const [viewUserDetails, setViewUserDetails] = useState({})
   const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showViewInfoModal, setShowViewInfoModal] = useState(false);
   const theme = useTheme();
 
   const handleAddUser = () => {
     setShowAddUserModal(true);
-  };
-
-  const handleAssignLead = (row) => {
-    setSelectedLead(row.original);
-    setShowAssignModal(true);
   };
 
   const toggleDrawer = () => {
@@ -38,17 +32,36 @@ const User = () => {
   };
 
   const handleSaveUser = (newUser) => {
-    const newUserWithId = {
-      ...newUser,
-      id: Math.max(...leads.map(user => user.id)) + 1,
-      phone: 'N/A',
-      status: 'Active'
-    };
-    setLeads([...leads, newUserWithId]);
+    dispatch(addUser(newUser)).unwrap().then((res)=>{
+      setToast({ open: true, message: res.message });
+      setIsRefresh(true)
+    })
+    .catch(err => setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'}))
   }
+
+  const handleRemoveUser = (row) => {
+    dispatch(removeUser(row._id)).unwrap().then((res)=>{
+      setToast({ open: true, message: res.message });
+      setIsRefresh(true)
+    })
+    .catch(err => setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'}))
+  }
+
+  const handleViewModalInfo =(userInfo)=>{
+    setShowViewInfoModal(true)
+    setViewUserDetails(userInfo)
+  }
+
   useEffect(() => {
     dispatch(getAllUser())
-  },[])
+  },[dispatch])
+
+  useEffect(() => {
+    if(isRefresh){
+      dispatch(getAllUser())
+      setIsRefresh(false)
+    }   
+  },[isRefresh])
 
   const columns = [
     { 
@@ -190,23 +203,14 @@ const User = () => {
               }
             }}
             renderRowActions={({ row }) => (
-              <Button
-                variant="outlined"
-                onClick={() => handleAssignLead(row)}
-                sx={{ 
-                  mr: 1,
-                  textTransform: 'none',
-                  borderRadius: 1,
-                  borderColor: theme.palette.primary.main,
-                  color: theme.palette.primary.main,
-                  '&:hover': {
-                    backgroundColor: `${theme.palette.primary.main}10`,
-                    borderColor: theme.palette.primary.dark,
-                  }
-                }}
-              >
-                Assign
-              </Button>
+              <Box>
+                <IconButton onClick={() => handleViewModalInfo(row.original)}>
+                  <VisibilityOutlinedIcon />
+                </IconButton>
+                <IconButton onClick={() => handleRemoveUser(row.original)}>
+                  <DeleteOutlineOutlinedIcon/>
+                </IconButton>
+              </Box>
             )}
           />
         </Paper>
@@ -215,6 +219,17 @@ const User = () => {
           onClose={() => setShowAddUserModal(false)}
           onSave={handleSaveUser}
         />
+        <Toaster
+          message={toast.message}
+          open={toast.open}
+          severity={toast.severity}
+          onClose={() => setToast({ ...toast, open: false })}
+          />
+          <ViewInfoModal
+            open={showViewInfoModal}
+            onClose={() => setShowViewInfoModal(false)}
+            details={viewUserDetails}
+          />
       </Box>
     </Box>
   );

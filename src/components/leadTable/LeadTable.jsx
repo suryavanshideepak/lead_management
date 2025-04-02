@@ -6,7 +6,6 @@ import AssignLeadModal from "../leadModal/AssignLeadModal";
 
 const LeadTable = () => {
     const [leads, setLeads] = useState([]);
-    const [open, setOpen] = useState(false);
     const [showAssignModal, setShowAssignModal] = useState(false);
     const [selectedLead, setSelectedLead] = useState(null);
   
@@ -33,10 +32,6 @@ const LeadTable = () => {
     const handleAssignLead = (row) => {
       setSelectedLead(row.original);
       setShowAssignModal(true);
-    };
-  
-    const toggleDrawer = () => {
-      setOpen(!open);
     };
   
     const columns = [

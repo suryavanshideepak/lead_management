@@ -25,6 +25,29 @@ export const getAllUser = createAsyncThunk(
     }
 )
 
+export const addUser = createAsyncThunk(
+    'user/addUser',async(payload,{rejectWithValue}) => {
+        try {
+            const response = await API.post('http://localhost:4500/user/createUser',payload);
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data || err.message);
+        }
+    }
+)
+
+export const removeUser = createAsyncThunk(
+    'user/removeUser',async(id,{rejectWithValue}) => {
+        console.log(id)
+        try {
+            const response = await API.delete(`http://localhost:4500/user/removeUser?userId=${id}`);
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data || err.message);
+        }
+    }
+)
+
 const initialState = {
     isForgotPass:false,
     allUsers:[]
