@@ -4,15 +4,34 @@ import API from "../axios_interceptor/axiosInstance";
 
 
 export const getAllLeads = createAsyncThunk(
-    'user/getAllLeads',async(_,{rejectWithValue}) => {
-        try {
-            const response = await API.get('http://localhost:4500/leads/getAllLeads');
-            return response.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data || err.message);
-        }
+    'user/getAllLeads',
+    async ({ page = 1, limit = 10, search = '', disposition = '' }, { rejectWithValue }) => {
+      try {
+        const response = await API.post('http://localhost:4500/leads/getAllLeads', {
+          page,
+          limit,
+          search,
+          disposition,
+        }); 
+        return response.data;
+      } catch (err) {
+        return rejectWithValue(err.response?.data || err.message);
+      }
     }
-)
+  );
+
+  export const createOrder = createAsyncThunk(
+    'user/createOrder',
+    async (payload, { rejectWithValue }) => {
+      try {
+        const response = await API.post('http://localhost:4500/leads/createLead', payload); 
+        return response.data;
+      } catch (err) {
+        return rejectWithValue(err.response?.data || err.message);
+      }
+    }
+  );
+  
 
 const initialState = {
     allLeads:[]

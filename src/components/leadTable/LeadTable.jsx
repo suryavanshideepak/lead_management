@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
 import { Button, Box, useTheme, Paper, Typography } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import AssignLeadModal from "../leadModal/AssignLeadModal";
 import * as XLSX from 'xlsx';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { createOrder, getAllLeads } from "../../app/leads/leadSlice";
+import SearchBar from "../searchComponent/SearchBar";
+import Toaster from "../../containers/Toaster";
+import DispositionFilter from "../SelectComponent/DispositionFilter";
+import CreateLeadModal from "../createLead/CreateLeadModal";
 
 const LeadTable = () => {
   const { allLeads } = useSelector(state => state.lead)
-  console.log(allLeads)
+  const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
+
   const [leads, setLeads] = useState([]);
+  const [openCreateLeadModal, setOpenCreateLeadModal] = useState(false)
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  const dispatch = useDispatch()
+
   const theme = useTheme()
 
   const handleFileUpload = (e) => {
@@ -23,8 +35,6 @@ const LeadTable = () => {
   reader.onload = (event) => {
     const data = new Uint8Array(event.target.result);
     const workbook = XLSX.read(data, { type: 'array' });
-    console.log(workbook)
-
     const sheetName = workbook.SheetNames[0];
     
     const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
@@ -56,6 +66,27 @@ const LeadTable = () => {
     setSelectedLead(row.original);
     setShowAssignModal(true);
   };
+
+  const fetchAllLeads = (search,disposition) => {
+    dispatch(getAllLeads({ page: page + 1, limit: pageSize,search, disposition})).unwrap().then((res) => {
+      setTotalCount(res.totalCount || 0)
+    }).catch((err) => {
+        setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'})
+    })
+  }
+
+  const handleCreateLead = (leadData) => {
+    dispatch(createOrder(leadData)).unwrap().then((res) => {
+      fetchAllLeads()
+      setToast({ open: true, message: res.message})
+    }).catch((err) => {
+        setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'})
+    })
+  }
+
+  useEffect(() => {
+    fetchAllLeads()
+  },[dispatch, page, pageSize])
   
 
   const columns = [
@@ -180,6 +211,20 @@ const LeadTable = () => {
           <Button variant="contained" onClick={handleExport} sx={{ ml: 2, backgroundColor: '#32de84', }}>
             Export Leads
           </Button>
+          <Button variant="contained" sx={{ ml: 2, backgroundColor: '#32de84', }} onClick={() => setOpenCreateLeadModal(true)}>
+            Create Order
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            mb: 3
+          }}
+        >
+          <SearchBar onSearch={(query) => fetchAllLeads(query)}/>
+          <DispositionFilter onFilter={(query) => fetchAllLeads('',query)} />
         </Box>
         <Box sx={{ overflow: 'auto', maxWidth: '100%' }}> 
         <MaterialReactTable
@@ -234,6 +279,13 @@ const LeadTable = () => {
               Assign
             </Button>
           )}
+          manualPagination
+          rowCount={totalCount}
+          pageCount={page}
+          onPaginationChange={({pageIndex, pageSize}) => {
+            setPage(pageIndex)
+            setPageSize(pageIndex)
+          }}
         />
         </Box>
       </Paper>
@@ -243,6 +295,13 @@ const LeadTable = () => {
           onClose={() => setShowAssignModal(false)}
         />
       )}
+      <Toaster
+          message={toast.message}
+          open={toast.open}
+          severity={toast.severity}
+          onClose={() => setToast({ ...toast, open: false })}
+          />
+      <CreateLeadModal open={openCreateLeadModal} onClose={() => setOpenCreateLeadModal(false)} onSubmit={handleCreateLead} />
     </Box>
   )
 }
