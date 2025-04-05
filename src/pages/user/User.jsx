@@ -36,7 +36,9 @@ const User = () => {
       setToast({ open: true, message: res.message });
       setIsRefresh(true)
     })
-    .catch(err => setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'}))
+    .catch(err => {
+      setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'})
+    })
   }
 
   const handleRemoveUser = (row) => {
@@ -44,7 +46,9 @@ const User = () => {
       setToast({ open: true, message: res.message });
       setIsRefresh(true)
     })
-    .catch(err => setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'}))
+    .catch(err => {
+     setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'})
+    })
   }
 
   const handleViewModalInfo =(userInfo)=>{
@@ -54,7 +58,7 @@ const User = () => {
 
   useEffect(() => {
     dispatch(getAllUser())
-  },[dispatch])
+  },[])
 
   useEffect(() => {
     if(isRefresh){
@@ -88,9 +92,9 @@ const User = () => {
         const status = cell.getValue();
         let color;
         switch(status) {
-          case 'Active': color = theme.palette.success.main; break;
+          case 'ACTIVE': color = theme.palette.success.main; break;
           case 'Inactive': color = theme.palette.error.main; break;
-          case 'Pending': color = theme.palette.warning.main; break;
+          case 'PENDING': color = theme.palette.warning.main; break;
           default: color = theme.palette.text.secondary;
         }
         return (
