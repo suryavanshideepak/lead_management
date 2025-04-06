@@ -14,7 +14,7 @@ const Leads = () => {
 
 
     return (
-    <Box sx={{ display: 'flex', overflow: 'hidden' }}>
+    <Box sx={{ display: 'flex', overflow: 'hidden', width:'100%' }}>
         <Sidebar open={open} toggleDrawer={toggleDrawer} />
         <Navbar title={"Leads"} open={open} toggle={toggleDrawer}/>
         <LeadTable/>

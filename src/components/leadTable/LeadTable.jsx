@@ -1,59 +1,45 @@
 import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
-import { Button, Box, useTheme, Paper, Typography } from "@mui/material";
+import { Button, Box, useTheme, Paper, Typography, Grid2 } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import AssignLeadModal from "../leadModal/AssignLeadModal";
-import * as XLSX from 'xlsx';
 import { useDispatch, useSelector } from "react-redux";
-import { createOrder, getAllLeads } from "../../app/leads/leadSlice";
+import { createOrder, getAllLeads, importLeadsFromCsv } from "../../app/leads/leadSlice";
 import SearchBar from "../searchComponent/SearchBar";
 import Toaster from "../../containers/Toaster";
 import DispositionFilter from "../SelectComponent/DispositionFilter";
 import CreateLeadModal from "../createLead/CreateLeadModal";
+import CsvUploader from "../csvUploader/CsvUploader";
+
 
 const LeadTable = () => {
   const { allLeads } = useSelector(state => state.lead)
   const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
 
-  const [leads, setLeads] = useState([]);
+  const [loading, setLoading] = useState(false)
   const [openCreateLeadModal, setOpenCreateLeadModal] = useState(false)
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pagination, setPagination] = useState({pageIndex:0, pageSize:10})
+  const [rowSelection, setRowSelection] = useState({})
   const [totalCount, setTotalCount] = useState(0);
   const dispatch = useDispatch()
 
   const theme = useTheme()
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = (event) => {
-    const data = new Uint8Array(event.target.result);
-    const workbook = XLSX.read(data, { type: 'array' });
-    const sheetName = workbook.SheetNames[0];
-    
-    const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-    console.log(sheet); 
-    setLeads(sheet);
-  };
-
-  reader.readAsArrayBuffer(file);
-    Papa.parse(file, {
-      header: true,
-      complete: (results) => {
-        console.log(results)
-        setLeads(results.data);
-      },
-    });
+  const handleFileUpload = (file) => {
+    setLoading(true)
+    dispatch(importLeadsFromCsv({leads:file})).unwrap().then((res) => {
+      setLoading(false)
+      fetchAllLeads()
+      setToast({ open: true, message: res.message})
+    }).catch((err) => {
+        setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'})
+    })
   };
 
   const handleExport = () => {
-    const csv = Papa.unparse(leads);
+    const csv = Papa.unparse(allLeads);
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -63,13 +49,18 @@ const LeadTable = () => {
   };
 
   const handleAssignLead = (row) => {
-    setSelectedLead(row.original);
+    // setSelectedLead(row.original);
     setShowAssignModal(true);
   };
 
-  const fetchAllLeads = (search,disposition) => {
-    dispatch(getAllLeads({ page: page + 1, limit: pageSize,search, disposition})).unwrap().then((res) => {
-      setTotalCount(res.totalCount || 0)
+  const fetchAllLeads = (search, desposition) => {
+    dispatch(getAllLeads({ 
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+      search,
+      desposition
+    })).unwrap().then((res) => {
+      setTotalCount(res?.totalLeads || 0)
     }).catch((err) => {
         setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'})
     })
@@ -86,7 +77,7 @@ const LeadTable = () => {
 
   useEffect(() => {
     fetchAllLeads()
-  },[dispatch, page, pageSize])
+  },[dispatch, pagination.pageIndex, pagination.pageSize])
   
 
   const columns = [
@@ -115,6 +106,52 @@ const LeadTable = () => {
       )
     },
     { 
+      accessorKey: "email", 
+      header: "Email",
+      size: 200,
+      Cell: ({ cell }) => (
+        <Typography color="textSecondary">{cell.getValue()}</Typography>
+      )
+    },
+    // { 
+    //   accessorKey: "status",
+    //   header: "Status",
+    //   size: 100,
+    //   Cell: ({ cell }) => {
+    //     const status = cell.getValue();
+    //     let color;
+    //     switch(status) {
+    //       case 'Active': color = theme.palette.success.main; break;
+    //       case 'Inactive': color = theme.palette.error.main; break;
+    //       case 'Pending': color = theme.palette.warning.main; break;
+    //       default: color = theme.palette.text.secondary;
+    //     }
+    //     return (
+    //       <Box
+    //         sx={{
+    //           backgroundColor: `${color}20`,
+    //           color: color,
+    //           borderRadius: '4px',
+    //           padding: '4px 8px',
+    //           display: 'inline-block',
+    //           fontWeight: '500',
+    //           width:'100%'
+    //         }}
+    //       >
+    //         {status}
+    //       </Box>
+    //     );
+    //   }
+    // },
+    { 
+      accessorKey: "desposition", 
+      header: "Desposition",
+      size: 200,
+      Cell: ({ cell }) => (
+        <Typography color="textSecondary">{cell.getValue()}</Typography>
+      )
+    },
+    { 
       accessorKey: "comment", 
       header: "Comment",
       size: 200,
@@ -123,49 +160,11 @@ const LeadTable = () => {
       )
     },
     { 
-      accessorKey: "email", 
-      header: "Email",
+      accessorKey: "action", 
+      header: "Action",
       size: 200,
       Cell: ({ cell }) => (
-        <Typography color="textSecondary">{cell.getValue()}</Typography>
-      )
-    },
-    { 
-      accessorKey: "status",
-      header: "Status",
-      size: 100,
-      Cell: ({ cell }) => {
-        const status = cell.getValue();
-        let color;
-        switch(status) {
-          case 'Active': color = theme.palette.success.main; break;
-          case 'Inactive': color = theme.palette.error.main; break;
-          case 'Pending': color = theme.palette.warning.main; break;
-          default: color = theme.palette.text.secondary;
-        }
-        return (
-          <Box
-            sx={{
-              backgroundColor: `${color}20`,
-              color: color,
-              borderRadius: '4px',
-              padding: '4px 8px',
-              display: 'inline-block',
-              fontWeight: '500',
-              width:'100%'
-            }}
-          >
-            {status}
-          </Box>
-        );
-      }
-    },
-    { 
-      accessorKey: "desposition", 
-      header: "Desposition",
-      size: 200,
-      Cell: ({ cell }) => (
-        <Typography color="textSecondary">{cell.getValue()}</Typography>
+  <></>
       )
     },
   ];
@@ -187,8 +186,7 @@ const LeadTable = () => {
           borderRadius: 4,
           backgroundColor: theme.palette.background.paper,
           border: `1px solid ${theme.palette.divider}`,
-          maxHeight: '80vh', 
-          width:'85%'
+          maxWidth: '90vw', overflow: 'hidden', 
         }}
       >
         <Box
@@ -202,35 +200,50 @@ const LeadTable = () => {
           <Typography variant="h5" fontWeight="bold">
             Lead Management
           </Typography>
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleFileUpload}
-            id="file-upload"
-          />
-          <Button variant="contained" onClick={handleExport} sx={{ ml: 2, backgroundColor: '#32de84', }}>
-            Export Leads
-          </Button>
-          <Button variant="contained" sx={{ ml: 2, backgroundColor: '#32de84', }} onClick={() => setOpenCreateLeadModal(true)}>
-            Create Order
-          </Button>
+        
+          <Grid2 container spacing={1} justifyContent="flex-end">
+            <Grid2 item xs={12} sm={4}>
+              <CsvUploader onFileUpload={handleFileUpload} />
+            </Grid2>
+            <Grid2 item xs={6} sm={4}>
+              <Button variant="contained" onClick={handleExport} sx={{ backgroundColor: "#32de84", width: "100%" }}>
+                Export Leads
+              </Button>
+            </Grid2>
+            <Grid2 item xs={6} sm={4}>
+              <Button variant="contained" sx={{ backgroundColor: "#32de84", width: "100%" }} onClick={() => setOpenCreateLeadModal(true)}>
+                Create Order
+              </Button>
+            </Grid2>
+          </Grid2>
         </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            mb: 3
-          }}
-        >
-          <SearchBar onSearch={(query) => fetchAllLeads(query)}/>
-          <DispositionFilter onFilter={(query) => fetchAllLeads('',query)} />
+        <Box sx={{ mb: 2 }}>
+          <Grid2 container spacing={1}>
+            <Grid2 item xs={12} sm={6} md={4}>
+              <SearchBar onSearch={(query) => fetchAllLeads(query)}/>
+            </Grid2>
+            <Grid2 item xs={12} sm={6} md={4}>
+              <DispositionFilter onFilter={(query) => fetchAllLeads('',query)} />
+            </Grid2>
+            <Grid2 item xs={12} sm={6} md={4}>
+            {Object.keys(rowSelection).length >  0 ? <Button
+              variant="contained"
+              onClick={() => handleAssignLead(rowSelection)}
+              sx={{ mr: 1 }}
+              color="success"
+            >
+              Assign
+            </Button> : ''}
+            
+          </Grid2>
+          </Grid2>
         </Box>
-        <Box sx={{ overflow: 'auto', maxWidth: '100%' }}> 
+        <Box sx={{ width: "100%", overflowX: "auto", maxWidth: '100vw'  }}> 
         <MaterialReactTable
+          state= {{isLoading:loading,pagination, rowSelection}}
           columns={columns}
           data={allLeads?.data?.length ? allLeads.data : []}
-          enableRowActions
+          // enableRowActions
           enableDensityToggle={false}
           initialState={{density:'spacious'}}
           muiTablePaperProps={{
@@ -243,7 +256,7 @@ const LeadTable = () => {
           }}
           muiTableContainerProps={{
             sx: {
-              maxHeight: '70vh', // Limit height to keep scrolling active
+              maxHeight: '70vh',
               overflow: 'auto',
             },
           }}
@@ -270,37 +283,28 @@ const LeadTable = () => {
               }
             }
           }}
-          renderRowActions={({ row }) => (
-            <Button
-              variant="contained"
-              onClick={() => handleAssignLead(row)}
-              sx={{ mr: 1 }}
-            >
-              Assign
-            </Button>
-          )}
-          manualPagination
-          rowCount={totalCount}
-          pageCount={page}
-          onPaginationChange={({pageIndex, pageSize}) => {
-            setPage(pageIndex)
-            setPageSize(pageIndex)
-          }}
+          // renderRowActions={({ row }) => (
+          //   <Button
+          //     variant="contained"
+          //     onClick={() => handleAssignLead(row)}
+          //     sx={{ mr: 1 }}
+          //   >
+          //     Assign
+          //   </Button>
+          // )}
+          manualPagination={true}
+          onPaginationChange={ setPagination }
+          rowCount={totalCount ?? 0}
+          enableRowSelection={true}
+          getRowId={(row) => row._id}
+          onRowSelectionChange={ setRowSelection}
         />
         </Box>
       </Paper>
       {showAssignModal && (
-        <AssignLeadModal
-          lead={selectedLead}
-          onClose={() => setShowAssignModal(false)}
-        />
+        <AssignLeadModal lead={selectedLead} onClose={() => setShowAssignModal(false)}/>
       )}
-      <Toaster
-          message={toast.message}
-          open={toast.open}
-          severity={toast.severity}
-          onClose={() => setToast({ ...toast, open: false })}
-          />
+      <Toaster message={toast.message} open={toast.open} severity={toast.severity} onClose={() => setToast({ ...toast, open: false })}/>
       <CreateLeadModal open={openCreateLeadModal} onClose={() => setOpenCreateLeadModal(false)} onSubmit={handleCreateLead} />
     </Box>
   )

@@ -14,7 +14,7 @@ const AssignLeadModal = ({ lead, onClose }) => {
   const [employee, setEmployee] = useState("");
 
   const handleAssign = () => {
-    console.log(`Lead ${lead.name} assigned to ${employee}`);
+    console.log(`Lead ${lead?.name} assigned to ${employee}`);
     onClose();
   };
 
@@ -23,7 +23,7 @@ const AssignLeadModal = ({ lead, onClose }) => {
       <DialogTitle>Assign Lead</DialogTitle>
       <DialogContent>
         <Typography variant="body1" gutterBottom>
-          Lead: {lead.name}
+          Lead: {lead?.name}
         </Typography>
         <TextField
           fullWidth

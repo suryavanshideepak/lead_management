@@ -8,7 +8,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearch = debounce((value) => {
     onSearch(value);
-  }, 500); // Waits 500ms before triggering API call
+  }, 1000); 
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -18,8 +18,8 @@ const SearchBar = ({ onSearch }) => {
   return (
     <TextField
       label="Search Leads"
+      size="small"
       variant="outlined"
-      fullWidth
       value={searchTerm}
       onChange={handleChange}
       sx={{ marginBottom: 2 }}
