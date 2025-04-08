@@ -12,16 +12,14 @@ const DispositionFilter = ({ onFilter }) => {
   };
 
   return (
-    <FormControl variant="outlined" sx={{ minWidth: 200, marginBottom: 2 }}>
+    <FormControl variant="outlined" sx={{ minWidth: 200, marginBottom: 2 }} size="small">
       <InputLabel>Disposition</InputLabel>
       <Select
         value={selectedDisposition}
         onChange={handleChange}
         label="Disposition"
-        size="small"
         MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
       >
-        <MenuItem value="">All</MenuItem> 
         {dispositions.map((item) => (
           <MenuItem key={item} value={item}>
             {item}

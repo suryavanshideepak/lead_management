@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
-import { Button, Box, useTheme, Paper, Typography, Grid2 } from "@mui/material";
+import { Button, Box, useTheme, Paper, Typography, Grid2, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import AssignLeadModal from "../leadModal/AssignLeadModal";
 import { useDispatch, useSelector } from "react-redux";
-import { createOrder, getAllLeads, importLeadsFromCsv } from "../../app/leads/leadSlice";
+import { assignLead, createOrder, getAllAssignee, getAllLeads, importLeadsFromCsv } from "../../app/leads/leadSlice";
 import SearchBar from "../searchComponent/SearchBar";
 import Toaster from "../../containers/Toaster";
 import DispositionFilter from "../SelectComponent/DispositionFilter";
 import CreateLeadModal from "../createLead/CreateLeadModal";
 import CsvUploader from "../csvUploader/CsvUploader";
+import { getAllUser } from "../../app/users/userSlice";
+import { formatDate, getAssigneeName } from "../../utils/helpers";
 
 
 const LeadTable = () => {
-  const { allLeads } = useSelector(state => state.lead)
+  const { allLeads, allAssignee } = useSelector(state => state.lead)
+  const { allUsers } = useSelector((state) => state.user)
   const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
 
   const [loading, setLoading] = useState(false)
   const [openCreateLeadModal, setOpenCreateLeadModal] = useState(false)
   const [showAssignModal, setShowAssignModal] = useState(false);
-  const [selectedLead, setSelectedLead] = useState(null);
+  const [selectedLeads, setSelectedLeads] = useState(null);
+  const [isRefreshTable, setRefreshTable] = useState(false)
   const [pagination, setPagination] = useState({pageIndex:0, pageSize:10})
   const [rowSelection, setRowSelection] = useState({})
   const [totalCount, setTotalCount] = useState(0);
+  const [employee, setEmployee] = useState({});
   const dispatch = useDispatch()
 
   const theme = useTheme()
@@ -49,21 +54,28 @@ const LeadTable = () => {
   };
 
   const handleAssignLead = (row) => {
-    // setSelectedLead(row.original);
+     const selectedRows = Object.keys(rowSelection).map(id =>
+      allLeads?.data.find(row => row._id === id)
+    );
+    const sId = selectedRows.map((item) => item._id)
+    setSelectedLeads(sId);
     setShowAssignModal(true);
   };
 
   const fetchAllLeads = (search, desposition) => {
+    setLoading(true)
+    setRefreshTable(false)
     dispatch(getAllLeads({ 
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
       search,
       desposition
     })).unwrap().then((res) => {
+      setLoading(false)
       setTotalCount(res?.totalLeads || 0)
     }).catch((err) => {
         setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'})
-    })
+    }).finally(() => setLoading(false))
   }
 
   const handleCreateLead = (leadData) => {
@@ -75,12 +87,50 @@ const LeadTable = () => {
     })
   }
 
+  const handleAssign = (event) => {
+    const selectedId = event.target.value
+    const selectedEmployee = allUsers?.users.find((user)=> user._id === selectedId) || null
+    setEmployee(selectedEmployee)
+  };
+
+  const assignLeadFunc = (payload) => {
+    setLoading(true)
+    dispatch(assignLead(payload)).unwrap().then((res) => {
+      clearFilter()
+      setRefreshTable(true)
+      setToast({ open: true, message: res.message})
+    }).catch((err) => {
+      setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'})
+  })
+  }
+
+  const clearFilter = () => {
+    setRowSelection({})
+    setEmployee({})
+  }
+
   useEffect(() => {
     fetchAllLeads()
+    dispatch(getAllUser())
+    dispatch(getAllAssignee())
   },[dispatch, pagination.pageIndex, pagination.pageSize])
   
+  useEffect(() => {
+    if(isRefreshTable){
+      dispatch(getAllAssignee())
+      fetchAllLeads()
+    }
+  },[isRefreshTable])
 
   const columns = [
+    { 
+      accessorKey: "created_at", 
+      header: "Date",
+      size: 150,
+      Cell: ({ cell }) => (
+        <Typography fontWeight="medium">{formatDate(cell.getValue())}</Typography>
+      )
+    },
     { 
       accessorKey: "name", 
       header: "Name",
@@ -104,6 +154,12 @@ const LeadTable = () => {
       Cell: ({ cell }) => (
         <Typography color="textSecondary">{cell.getValue()}</Typography>
       )
+    },
+    { 
+      accessorKey: "assignee", 
+      header: "Assignee",
+      size: 200,
+      Cell: ({ cell }) =>(getAssigneeName(cell.row.original, allAssignee?.assigneeData, allUsers?.users))
     },
     { 
       accessorKey: "email", 
@@ -226,16 +282,38 @@ const LeadTable = () => {
               <DispositionFilter onFilter={(query) => fetchAllLeads('',query)} />
             </Grid2>
             <Grid2 item xs={12} sm={6} md={4}>
-            {Object.keys(rowSelection).length >  0 ? <Button
-              variant="contained"
-              onClick={() => handleAssignLead(rowSelection)}
-              sx={{ mr: 1 }}
-              color="success"
-            >
-              Assign
-            </Button> : ''}
-            
-          </Grid2>
+              <FormControl variant="outlined" sx={{ minWidth: 200, marginBottom: 2 }} size="small" >
+                <InputLabel>Employees</InputLabel>
+                <Select
+                  value={employee?._id || ""}
+                  onChange={handleAssign}
+                  fullWidth
+                  label="Employees"
+                  MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
+                >
+                      {allUsers?.users?.length > 0 ? allUsers.users.map((item) => (
+                        <MenuItem key={item._id} value={item._id}>
+                      {item.name}
+                    </MenuItem>
+                  )):[]}
+                </Select>
+              </FormControl>
+            </Grid2>
+            <Grid2 item xs={12} sm={6} md={4}>
+            <Button variant="contained" color="warning" onClick={clearFilter}>
+                Clear Filter
+              </Button>
+            </Grid2>
+            <Grid2 item xs={12} sm={6} md={4}>
+              {Object.keys(rowSelection).length >  0 ? <Button
+                variant="contained"
+                onClick={() => handleAssignLead(rowSelection)}
+                sx={{ mr: 1 }}
+                color="success"
+              >
+                Assign
+              </Button> : ''}
+            </Grid2>
           </Grid2>
         </Box>
         <Box sx={{ width: "100%", overflowX: "auto", maxWidth: '100vw'  }}> 
@@ -302,7 +380,7 @@ const LeadTable = () => {
         </Box>
       </Paper>
       {showAssignModal && (
-        <AssignLeadModal lead={selectedLead} onClose={() => setShowAssignModal(false)}/>
+        <AssignLeadModal leads={selectedLeads} assignLeadFunc={assignLeadFunc} onClose={() => setShowAssignModal(false)}/>
       )}
       <Toaster message={toast.message} open={toast.open} severity={toast.severity} onClose={() => setToast({ ...toast, open: false })}/>
       <CreateLeadModal open={openCreateLeadModal} onClose={() => setOpenCreateLeadModal(false)} onSubmit={handleCreateLead} />

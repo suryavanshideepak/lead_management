@@ -17,6 +17,43 @@ export const getAllLeads = createAsyncThunk(
     }
   );
 
+
+export const getLeadById = createAsyncThunk(
+  'user/getLeadById',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`http://localhost:4500/leads/getLeadById/${id}`); 
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+export const assignLead = createAsyncThunk(
+  'user/assignLead',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await API.post(`http://localhost:4500/leads/assignLead`,payload); 
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+export const getAllAssignee = createAsyncThunk(
+  'user/getAllAssignee',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`http://localhost:4500/leads/getAllAssignee`); 
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
   export const createOrder = createAsyncThunk(
     'user/createOrder',
     async (payload, { rejectWithValue }) => {
@@ -44,7 +81,8 @@ export const getAllLeads = createAsyncThunk(
   
 
 const initialState = {
-    allLeads:[]
+    allLeads:[],
+    allAssignee:[]
 }
 
 export const leadSlice = createSlice({
@@ -56,6 +94,9 @@ export const leadSlice = createSlice({
         builder.addCase(getAllLeads.fulfilled,(state, action) => {
             state.allLeads = action?.payload
         })
+        builder.addCase(getAllAssignee.fulfilled,(state, action) => {
+          state.allAssignee = action?.payload
+      })
     }
 })
 

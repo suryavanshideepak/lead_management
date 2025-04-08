@@ -13,3 +13,24 @@ export const decryptPassword = (encryptedData) => {
       return null;
     }
   };
+
+  export function getAssigneeName(row, assigneeData, users) {
+    const assignee = assigneeData.find(item => 
+      Array.isArray(item.leadIds) && item.leadIds.some(leadId => leadId === row?._id) 
+    );
+    return assignee 
+        ? users.find(user => user._id === assignee.userId)?.name || "Unknown" 
+        : "Unassigned";
+  }
+
+  export const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+  
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {  
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+  
