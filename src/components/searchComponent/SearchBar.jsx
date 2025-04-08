@@ -8,7 +8,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearch = debounce((value) => {
     onSearch(value);
-  }, 1000); 
+  }, 500); 
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
-import { Button, Box, useTheme, Paper, Typography, Grid2, Select, MenuItem, FormControl, InputLabel, TextField } from "@mui/material";
+import { Button, Box, useTheme, Paper, Typography, Grid2, Select, MenuItem, FormControl, InputLabel, TextField, IconButton } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import AssignLeadModal from "../leadModal/AssignLeadModal";
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useDispatch, useSelector } from "react-redux";
 import { assignLead, createOrder, getAllAssignee, getAllLeads, importLeadsFromCsv } from "../../app/leads/leadSlice";
 import SearchBar from "../searchComponent/SearchBar";
@@ -98,7 +100,6 @@ const LeadTable = () => {
     const selectedEmployee = allUsers?.users.find((user)=> user._id === selectedId) || null
     setEmployee(selectedEmployee)
   };
-  console.log(employee)
   const assignLeadFunc = (payload) => {
     setLoading(true)
     dispatch(assignLead(payload)).unwrap().then((res) => {
@@ -233,7 +234,14 @@ const LeadTable = () => {
       header: "Action",
       size: 200,
       Cell: ({ cell }) => (
-  <></>
+        <Box>
+          <IconButton>
+            <RemoveRedEyeOutlinedIcon/>
+          </IconButton>
+          <IconButton>
+            <EditOutlinedIcon/>
+          </IconButton>
+        </Box>
       )
     },
   ];
