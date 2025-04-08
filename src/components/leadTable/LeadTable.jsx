@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
-import { Button, Box, useTheme, Paper, Typography, Grid2, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Button, Box, useTheme, Paper, Typography, Grid2, Select, MenuItem, FormControl, InputLabel, TextField } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import AssignLeadModal from "../leadModal/AssignLeadModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +12,8 @@ import CreateLeadModal from "../createLead/CreateLeadModal";
 import CsvUploader from "../csvUploader/CsvUploader";
 import { getAllUser } from "../../app/users/userSlice";
 import { formatDate, getAssigneeName } from "../../utils/helpers";
-
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const LeadTable = () => {
   const { allLeads, allAssignee } = useSelector(state => state.lead)
@@ -28,6 +29,8 @@ const LeadTable = () => {
   const [rowSelection, setRowSelection] = useState({})
   const [totalCount, setTotalCount] = useState(0);
   const [employee, setEmployee] = useState({});
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
   const dispatch = useDispatch()
 
   const theme = useTheme()
@@ -69,7 +72,10 @@ const LeadTable = () => {
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
       search,
-      desposition
+      userId: employee?._id,
+      desposition,
+      fromDate: fromDate ? dayjs(fromDate).format("YYYY-MM-DD") : null,
+      toDate: toDate ? dayjs(toDate).format("YYYY-MM-DD") : null,
     })).unwrap().then((res) => {
       setLoading(false)
       setTotalCount(res?.totalLeads || 0)
@@ -87,12 +93,12 @@ const LeadTable = () => {
     })
   }
 
-  const handleAssign = (event) => {
+  const handleEmployeeFilter = (event) => {
     const selectedId = event.target.value
     const selectedEmployee = allUsers?.users.find((user)=> user._id === selectedId) || null
     setEmployee(selectedEmployee)
   };
-
+  console.log(employee)
   const assignLeadFunc = (payload) => {
     setLoading(true)
     dispatch(assignLead(payload)).unwrap().then((res) => {
@@ -107,13 +113,20 @@ const LeadTable = () => {
   const clearFilter = () => {
     setRowSelection({})
     setEmployee({})
+    setFromDate(null)
+    setToDate(null)
+    setEmployee({})
   }
 
   useEffect(() => {
     fetchAllLeads()
     dispatch(getAllUser())
     dispatch(getAllAssignee())
-  },[dispatch, pagination.pageIndex, pagination.pageSize])
+  },[dispatch, pagination.pageIndex, pagination.pageSize,])
+
+  useEffect(() => {
+    fetchAllLeads()
+  },[fromDate,toDate,employee])
   
   useEffect(() => {
     if(isRefreshTable){
@@ -286,7 +299,7 @@ const LeadTable = () => {
                 <InputLabel>Employees</InputLabel>
                 <Select
                   value={employee?._id || ""}
-                  onChange={handleAssign}
+                  onChange={handleEmployeeFilter}
                   fullWidth
                   label="Employees"
                   MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
@@ -300,7 +313,39 @@ const LeadTable = () => {
               </FormControl>
             </Grid2>
             <Grid2 item xs={12} sm={6} md={4}>
-            <Button variant="contained" color="warning" onClick={clearFilter}>
+              <DatePicker
+                label="From Date"
+                value={fromDate}
+                onChange={(date) => setFromDate(date)}
+                slotProps={{
+                  textField: { 
+                    size: "small", 
+                    sx: { 
+                      fontSize: "14px", 
+                      "& .MuiInputBase-root": { height: "40px" } // Adjust input height
+                    }
+                  }
+                }}
+              />
+              </Grid2>
+              <Grid2 item xs={12} sm={6} md={4}>
+              <DatePicker
+                label="To Date"
+                value={toDate}
+                onChange={(date) => setToDate(date)}
+                slotProps={{
+                  textField: { 
+                    size: "small", 
+                    sx: { 
+                      fontSize: "14px", 
+                      "& .MuiInputBase-root": { height: "40px" } // Adjust input height
+                    }
+                  }
+                }}
+              />
+            </Grid2>
+            <Grid2 item xs={12} sm={6} md={4}>
+              <Button variant="contained" color="warning" onClick={clearFilter}>
                 Clear Filter
               </Button>
             </Grid2>

@@ -5,10 +5,18 @@ import API from "../axios_interceptor/axiosInstance";
 
 export const getAllLeads = createAsyncThunk(
     'user/getAllLeads',
-    async ({ page = 1, limit = 10, search = '', desposition = '' }, { rejectWithValue }) => {
+    async ({ page = 1, limit = 10, search = '', desposition = '',fromDate, toDate, userId }, { rejectWithValue }) => {
       try {
         const response = await API.get('http://localhost:4500/leads/getAllLeads', {
-            params: { page, limit, search, desposition },
+            params: { 
+              page, 
+              limit, 
+              search, 
+              desposition, 
+              fromDate, 
+              toDate, 
+              userId 
+            },
         }); 
         return response.data;
       } catch (err) {

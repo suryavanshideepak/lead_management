@@ -13,26 +13,23 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { assignLead } from "../../app/leads/leadSlice";
+import { useSelector } from "react-redux";
 
 const AssignLeadModal = ({ leads,onClose,assignLeadFunc }) => {
-  const [employee, setEmployee] = useState({});
+  const [employees, setEmployees] = useState({});
   const { allUsers } = useSelector((state) => state.user)
-  const dispatch = useDispatch()
   const handleAssign = () => {
     const payload = {
       leadIds:leads,
-      userId:employee?._id
+      userId:employees?._id
     }
     assignLeadFunc(payload)
     onClose();
   };
-  console.log(employee)
   const handleSelectEmployee = (event) => {
     const selectedId = event.target.value
     const selectedEmployee = allUsers.users.find((user) => user._id === selectedId) || null
-    setEmployee(selectedEmployee)
+    setEmployees(selectedEmployee)
   }
 
   return (
@@ -44,7 +41,7 @@ const AssignLeadModal = ({ leads,onClose,assignLeadFunc }) => {
         <FormControl variant="outlined" fullWidth>
         <InputLabel>Employees</InputLabel>
           <Select
-            value={employee?._id || ""}
+            value={employees?._id || ""}
             onChange={handleSelectEmployee}
             fullWidth
             label="Employees"
