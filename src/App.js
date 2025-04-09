@@ -5,15 +5,20 @@ import Dashboard from './components/dashboard/Dashboard';
 import User from './pages/user/User';
 import PrivateRoute from './routes/PrivateRoutes';
 import Leads from './pages/Leads/Leads';
+import EmployeeLeads from './pages/EmployeeLeads/EmployeeLeads';
+import { useSelector } from 'react-redux';
+import { selectAuthState } from './app/auth/authSlice';
 
 function App() {
+  const { user } = useSelector(selectAuthState)
+  console.log(user)
   return (
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/dashboard" element={<PrivateRoute Component={Dashboard}/>} />
-      <Route path="/users" element={<PrivateRoute Component={User}/>} />
-      <Route path="/leads" element={<PrivateRoute Component={Leads}/>} />
+      {user.role === 'ADMIN' ? <Route path="/users" element={<PrivateRoute Component={User}/>} /> : null}
+      <Route path="/leads" element={<PrivateRoute Component={user?.role === 'ADMIN' ? Leads : EmployeeLeads }/>} />
     </Routes>
   </BrowserRouter>
   );

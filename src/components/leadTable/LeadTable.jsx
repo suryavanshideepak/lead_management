@@ -6,7 +6,7 @@ import AssignLeadModal from "../leadModal/AssignLeadModal";
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { useDispatch, useSelector } from "react-redux";
-import { assignLead, createOrder, getAllAssignee, getAllLeads, importLeadsFromCsv } from "../../app/leads/leadSlice";
+import { assignLead, createOrder, getAllAssignee, getAllLeads, importLeadsFromCsv, updateLead } from "../../app/leads/leadSlice";
 import SearchBar from "../searchComponent/SearchBar";
 import Toaster from "../../containers/Toaster";
 import DispositionFilter from "../SelectComponent/DispositionFilter";
@@ -16,6 +16,7 @@ import { getAllUser } from "../../app/users/userSlice";
 import { formatDate, getAssigneeName } from "../../utils/helpers";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import ViewEditLead from "../view_editLead/ViewEditLead";
 
 const LeadTable = () => {
   const { allLeads, allAssignee } = useSelector(state => state.lead)
@@ -23,11 +24,14 @@ const LeadTable = () => {
   const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
 
   const [loading, setLoading] = useState(false)
+  const [pagination, setPagination] = useState({pageIndex:0, pageSize:10})
   const [openCreateLeadModal, setOpenCreateLeadModal] = useState(false)
+  const [openViewEditModal, setOpenViewEditModal] = useState(false)
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [isViewLeadModal, setIsViewLeadModal] = useState(false);
+  const [leadDetails, setLeadDetails] = useState(false);
   const [selectedLeads, setSelectedLeads] = useState(null);
   const [isRefreshTable, setRefreshTable] = useState(false)
-  const [pagination, setPagination] = useState({pageIndex:0, pageSize:10})
   const [rowSelection, setRowSelection] = useState({})
   const [totalCount, setTotalCount] = useState(0);
   const [employee, setEmployee] = useState({});
@@ -95,6 +99,16 @@ const LeadTable = () => {
     })
   }
 
+  const handleUpdateLead = (leadData) => {
+    console.log(leadData)
+    dispatch(updateLead({id:leadData.id,payload:leadData})).then((res) => {
+      fetchAllLeads()
+      setToast({ open: true, message: res.message})
+    }).catch((err) => {
+      setToast({ open: true, message: err.message || 'Something went wrong', severity:'error'})
+    })
+  }
+
   const handleEmployeeFilter = (event) => {
     const selectedId = event.target.value
     const selectedEmployee = allUsers?.users.find((user)=> user._id === selectedId) || null
@@ -117,6 +131,18 @@ const LeadTable = () => {
     setFromDate(null)
     setToDate(null)
     setEmployee({})
+  }
+
+  const handleViewLead =(data) => {
+    setOpenViewEditModal(true)
+    setIsViewLeadModal(true)
+    setLeadDetails(data)
+  }
+
+  const handleEditLead = (data) => {
+    setOpenViewEditModal(true)
+    setIsViewLeadModal(false)
+    setLeadDetails(data)
   }
 
   useEffect(() => {
@@ -235,10 +261,10 @@ const LeadTable = () => {
       size: 200,
       Cell: ({ cell }) => (
         <Box>
-          <IconButton>
+          <IconButton onClick={()=> handleViewLead(cell.row.original)}>
             <RemoveRedEyeOutlinedIcon/>
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() => handleEditLead(cell.row.original)}>
             <EditOutlinedIcon/>
           </IconButton>
         </Box>
@@ -435,6 +461,7 @@ const LeadTable = () => {
       {showAssignModal && (
         <AssignLeadModal leads={selectedLeads} assignLeadFunc={assignLeadFunc} onClose={() => setShowAssignModal(false)}/>
       )}
+      <ViewEditLead open={openViewEditModal} onClose={() => setOpenViewEditModal(false)} isViewLeadModal={isViewLeadModal} leadDetails={leadDetails} onSubmit={handleUpdateLead}/>
       <Toaster message={toast.message} open={toast.open} severity={toast.severity} onClose={() => setToast({ ...toast, open: false })}/>
       <CreateLeadModal open={openCreateLeadModal} onClose={() => setOpenCreateLeadModal(false)} onSubmit={handleCreateLead} />
     </Box>

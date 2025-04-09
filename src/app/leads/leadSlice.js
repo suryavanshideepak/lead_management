@@ -38,6 +38,19 @@ export const getLeadById = createAsyncThunk(
   }
 );
 
+export const updateLead = createAsyncThunk(
+  'user/updateLead',
+  async ({ id ,payload }, { rejectWithValue }) => {
+    console.log(id,payload)
+    try {
+      const response = await API.put(`http://localhost:4500/leads/updateLead/${id}`,payload); 
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
 export const assignLead = createAsyncThunk(
   'user/assignLead',
   async (payload, { rejectWithValue }) => {
