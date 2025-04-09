@@ -49,7 +49,7 @@ const LeadTable = () => {
   };
 
   const handleExport = () => {
-    const csv = Papa.unparse(allLeads);
+    const csv = Papa.unparse(allLeads.data);
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
