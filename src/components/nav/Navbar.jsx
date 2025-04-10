@@ -2,9 +2,10 @@ import { AppBar, Avatar, Badge, Box, IconButton, Toolbar, Typography } from '@mu
 import { Notifications as NotificationsIcon } from "@mui/icons-material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react'
+import { useSelector } from 'react-redux';
 
-const Navbar = ({open,toggle,title=""}) => {
-    
+const Navbar = ({ toggle, title="" }) => {
+    const { isOpen } = useSelector(state => state.user)
     const toggleDrawer = () => {
         toggle()
       };
@@ -13,8 +14,8 @@ const Navbar = ({open,toggle,title=""}) => {
         <AppBar
         sx={{
         position:"fixed",
-          width: open ? `calc(100% - 250px)` : `calc(100% - 56px)`,
-          ml: open ? '250px' : '56px',
+          width: isOpen ? `calc(100% - 250px)` : `calc(100% - 56px)`,
+          ml: isOpen ? '250px' : '56px',
           transition: 'width 0.3s ease, margin 0.3s ease',
         }}
       >

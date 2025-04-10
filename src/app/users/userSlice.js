@@ -50,7 +50,8 @@ export const removeUser = createAsyncThunk(
 
 const initialState = {
     isForgotPass:false,
-    allUsers:[]
+    allUsers:[],
+    isOpen:false
 }
 
 export const userSlice = createSlice({
@@ -63,6 +64,12 @@ export const userSlice = createSlice({
                 isForgotPass:action.payload
             }
         },
+        sidebarCollapse: (state, action) => {
+            return{
+                ...state,
+                isOpen:action.payload
+            }
+        }
 
     },
     extraReducers: (builder) => {
@@ -75,6 +82,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const { handleForgot } = userSlice.actions;
+export const { handleForgot, sidebarCollapse } = userSlice.actions;
 export const selectUserState = (state) => state?.user
 export default userSlice.reducer;

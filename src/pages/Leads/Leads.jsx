@@ -3,33 +3,36 @@ import LeadTable from '../../components/leadTable/LeadTable'
 import { Box } from '@mui/material'
 import Sidebar from '../../components/dashboard/Sidebar'
 import Navbar from '../../components/nav/Navbar'
+import { useDispatch, useSelector } from 'react-redux'
+import { sidebarCollapse } from '../../app/users/userSlice'
 
 const Leads = () => {
-    const [open, setOpen] = useState(false);
+    const { isOpen } = useSelector((state) => state.user)
+    const dispatch = useDispatch()
 
     const toggleDrawer = () => {
-        setOpen(!open);
+        dispatch(sidebarCollapse(!isOpen))
     };
 
 
     return (
-    <Box sx={{ display: 'flex', overflow: 'hidden' }}>
-        <Sidebar open={open} toggleDrawer={toggleDrawer} />
-        <Navbar title={"Leads"} open={open} toggle={toggleDrawer}/>
-        <Box
+        <Box sx={{ display: 'flex', overflow: 'hidden' }}>
+            <Sidebar toggleDrawer={toggleDrawer} />
+            <Navbar title={"Leads"} toggle={toggleDrawer} />
+            <Box
                 component="main"
                 sx={{
                     flexGrow: 1,
                     transition: 'margin 0.3s ease, width 0.3s ease',
-                    marginLeft: open ? '10px' : '0px', // Adjusting margin based on sidebar width
-                    width: open ? 'calc(100% - 250px)' : 'calc(100% - 56px)', // Adjusting width dynamically
+                    marginLeft: isOpen ? '10px' : '0px',
+                    width: isOpen ? 'calc(100% - 250px)' : 'calc(100% - 56px)',
                     overflow: 'hidden',
                 }}
             >
-        <LeadTable/>
+                <LeadTable />
+            </Box>
         </Box>
-    </Box>
-  )
+    )
 }
 
 export default Leads

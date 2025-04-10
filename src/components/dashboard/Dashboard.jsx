@@ -5,18 +5,21 @@ import '../../App.css';
 import Navbar from "../nav/Navbar";
 import UserSalesChart from "./UserSalesChart";
 import SalesChart from "./SalesChart";
+import { useDispatch, useSelector } from "react-redux";
+import { sidebarCollapse } from "../../app/users/userSlice";
 
 const Dashboard = ({title}) => {
-  const [open, setOpen] = useState(false);
+  const { isOpen } = useSelector(state => state.user)
+  const dispatch = useDispatch()
 
   const toggleDrawer = () => {
-    setOpen(!open);
+    dispatch(sidebarCollapse(!isOpen))
   };
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <Sidebar open={open} toggleDrawer={toggleDrawer} />
-      <Navbar title={"Dashboard"} open={open} toggle={toggleDrawer}/>
+      <Sidebar toggleDrawer={toggleDrawer} />
+      <Navbar title={"Dashboard"} toggle={toggleDrawer}/>
       <Box>
         <Grid2 container>
           <Grid2 item sx={4}>

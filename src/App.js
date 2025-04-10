@@ -11,13 +11,12 @@ import { selectAuthState } from './app/auth/authSlice';
 
 function App() {
   const { user } = useSelector(selectAuthState)
-  console.log(user)
   return (
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/dashboard" element={<PrivateRoute Component={Dashboard}/>} />
-      {user.role === 'ADMIN' ? <Route path="/users" element={<PrivateRoute Component={User}/>} /> : null}
+      {user?.role === 'ADMIN' ? <Route path="/users" element={<PrivateRoute Component={User}/>} /> : null}
       <Route path="/leads" element={<PrivateRoute Component={user?.role === 'ADMIN' ? Leads : EmployeeLeads }/>} />
     </Routes>
   </BrowserRouter>

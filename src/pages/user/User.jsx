@@ -7,16 +7,15 @@ import Navbar from '../../components/nav/Navbar';
 import { MaterialReactTable } from 'material-react-table';
 import AddUserModal from '../../components/Modals/AddUserModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser, getAllUser, removeUser } from '../../app/users/userSlice';
+import { addUser, getAllUser, removeUser, sidebarCollapse } from '../../app/users/userSlice';
 import Toaster from '../../containers/Toaster';
 import ViewInfoModal from '../../components/Modals/ViewInfoModal';
 
 const User = () => {
   const dispatch = useDispatch()
-  const { allUsers } = useSelector((state) => state.user)
+  const { allUsers, isOpen } = useSelector((state) => state.user)
   const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
   
-  const [open, setOpen] = useState(false);
   const [isRefresh, setIsRefresh] = useState(false)
   const [viewUserDetails, setViewUserDetails] = useState({})
   const [showAddUserModal, setShowAddUserModal] = useState(false);
@@ -28,7 +27,7 @@ const User = () => {
   };
 
   const toggleDrawer = () => {
-    setOpen(!open);
+    dispatch(sidebarCollapse(!isOpen))
   };
 
   const handleSaveUser = (newUser) => {
@@ -119,8 +118,8 @@ const User = () => {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <Sidebar open={open} toggleDrawer={toggleDrawer} />
-      <Navbar title={'User Management'} open={open} toggle={toggleDrawer}/>
+      <Sidebar toggleDrawer={toggleDrawer} />
+      <Navbar title={'User Management'} toggle={toggleDrawer}/>
       <Box
         component="main"
         sx={{

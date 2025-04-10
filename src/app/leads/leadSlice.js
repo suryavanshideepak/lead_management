@@ -24,6 +24,28 @@ export const getAllLeads = createAsyncThunk(
     }
   );
 
+  export const getLeadsForEmployee = createAsyncThunk(
+    'user/getLeadsForEmployee',
+    async ({ page = 1, limit = 10, search = '', desposition = '',fromDate, toDate, userId }, { rejectWithValue }) => {
+      try {
+        const response = await API.get(`http://localhost:4500/leads/getLeadsByEmployeeId/${userId}`, {
+            params: { 
+              page, 
+              limit, 
+              search, 
+              desposition, 
+              fromDate, 
+              toDate, 
+              userId 
+            },
+        }); 
+        return response.data;
+      } catch (err) {
+        return rejectWithValue(err.response?.data || err.message);
+      }
+    }
+  );
+
 
 export const getLeadById = createAsyncThunk(
   'user/getLeadById',
@@ -40,7 +62,6 @@ export const getLeadById = createAsyncThunk(
 export const updateLead = createAsyncThunk(
   'user/updateLead',
   async ({ id ,payload }, { rejectWithValue }) => {
-    console.log(id,payload)
     try {
       const response = await API.put(`http://localhost:4500/leads/updateLead/${id}`,payload); 
       return response.data;
@@ -89,7 +110,6 @@ export const getAllAssignee = createAsyncThunk(
   export const importLeadsFromCsv = createAsyncThunk(
     'user/importLeadsFromCsv',
     async (payload, { rejectWithValue }) => {
-      console.log(payload)
       try {
         const response = await API.post('http://localhost:4500/leads/importLeadsFromCsv', payload); 
         return response.data;
@@ -102,7 +122,8 @@ export const getAllAssignee = createAsyncThunk(
 
 const initialState = {
     allLeads:[],
-    allAssignee:[]
+    allAssignee:[],
+    allEmployeeLeads:[]
 }
 
 export const leadSlice = createSlice({
@@ -117,6 +138,9 @@ export const leadSlice = createSlice({
         builder.addCase(getAllAssignee.fulfilled,(state, action) => {
           state.allAssignee = action?.payload
       })
+      builder.addCase(getLeadsForEmployee.fulfilled,(state, action) => {
+        state.allEmployeeLeads = action?.payload
+    })
     }
 })
 

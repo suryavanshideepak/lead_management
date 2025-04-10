@@ -1,10 +1,35 @@
+import { Box } from '@mui/material'
 import React from 'react'
+import Sidebar from '../../components/dashboard/Sidebar'
+import Navbar from '../../components/nav/Navbar'
+import EmployeeLeadTable from '../../components/EmployeeLeadTable/EmployeeLeadTable'
+import { useDispatch, useSelector } from 'react-redux'
+import { sidebarCollapse } from '../../app/users/userSlice'
 
 const EmployeeLeads = () => {
+  const { isOpen } = useSelector((state) => state.user)
+    const dispatch = useDispatch()
+    
+    const toggleDrawer = () => {
+        dispatch(sidebarCollapse(!isOpen))
+    };
   return (
-    <div>
-        mmmmm
-    </div>
+    <Box sx={{ display: 'flex', overflow: 'hidden' }}>
+      <Sidebar toggleDrawer={toggleDrawer} />
+      <Navbar title={"Leads"} toggle={toggleDrawer} />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          transition: 'margin 0.3s ease, width 0.3s ease',
+          marginLeft: isOpen ? '10px' : '0px',
+          width: isOpen ? 'calc(100% - 250px)' : 'calc(100% - 56px)', 
+          overflow: 'hidden',
+        }}
+      >
+        <EmployeeLeadTable/>
+      </Box>
+    </Box>
   )
 }
 
