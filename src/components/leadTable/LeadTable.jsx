@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
-import { Button, Box, useTheme, Paper, Typography, Grid2, Select, MenuItem, FormControl, InputLabel, TextField, IconButton } from "@mui/material";
+import { Button, Box, useTheme, Paper, Typography, Grid2, Select, MenuItem, FormControl, InputLabel, IconButton } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import AssignLeadModal from "../leadModal/AssignLeadModal";
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
@@ -279,6 +279,8 @@ const LeadTable = () => {
         p: 3,
         mt: 8,
         transition: 'width 0.3s ease, margin 0.3s ease',
+        width:'97%',
+        height:'85vh'
       }}
     >
 
@@ -288,8 +290,8 @@ const LeadTable = () => {
           p: 3,
           borderRadius: 4,
           backgroundColor: theme.palette.background.paper,
-          border: `1px solid ${theme.palette.divider}`,
-          maxWidth: '90vw', overflow: 'hidden', 
+          overflow: 'hidden', 
+          boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
         }}
       >
         <Box
@@ -395,7 +397,6 @@ const LeadTable = () => {
             </Grid2>
           </Grid2>
         </Box>
-        <Box sx={{ width: "100%", overflowX: "auto", maxWidth: '100vw'  }}> 
         <MaterialReactTable
           state= {{isLoading:loading,pagination, rowSelection}}
           columns={columns}
@@ -409,17 +410,18 @@ const LeadTable = () => {
               border: `1px solid ${theme.palette.divider}`,
               borderRadius: 2,
               overflow: 'auto',
+              height:'80vh'
             }
           }}
           muiTableContainerProps={{
             sx: {
-              maxHeight: '70vh',
+              maxHeight: '56vh',
               overflow: 'auto',
             },
           }}
           muiTableHeadCellProps={{
             sx: {
-              backgroundColor: '#d3d3d3',
+              backgroundColor: '#32de84',
               fontWeight: '600',
               color: theme.palette.text.primary,
               borderBottom: `1px solid ${theme.palette.divider}`,
@@ -456,7 +458,6 @@ const LeadTable = () => {
           getRowId={(row) => row._id}
           onRowSelectionChange={ setRowSelection}
         />
-        </Box>
       </Paper>
       {showAssignModal && (
         <AssignLeadModal leads={selectedLeads} assignLeadFunc={assignLeadFunc} onClose={() => setShowAssignModal(false)}/>

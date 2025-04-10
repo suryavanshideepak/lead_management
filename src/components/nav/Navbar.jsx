@@ -11,8 +11,8 @@ const Navbar = ({open,toggle,title=""}) => {
   return (
     <div>
         <AppBar
-        position="fixed"
         sx={{
+        position:"fixed",
           width: open ? `calc(100% - 250px)` : `calc(100% - 56px)`,
           ml: open ? '250px' : '56px',
           transition: 'width 0.3s ease, margin 0.3s ease',

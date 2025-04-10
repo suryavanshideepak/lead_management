@@ -136,7 +136,7 @@ const User = () => {
             p: 3,
             borderRadius: 4,
             backgroundColor: theme.palette.background.paper,
-            border: `1px solid ${theme.palette.divider}`,
+            boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
           }}
         >
           <Box

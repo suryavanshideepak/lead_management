@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import LeadTable from '../../components/leadTable/LeadTable'
-import { Box, Paper , useTheme} from '@mui/material'
+import { Box } from '@mui/material'
 import Sidebar from '../../components/dashboard/Sidebar'
 import Navbar from '../../components/nav/Navbar'
 
 const Leads = () => {
     const [open, setOpen] = useState(false);
-    const theme = useTheme();
 
     const toggleDrawer = () => {
         setOpen(!open);
@@ -14,10 +13,21 @@ const Leads = () => {
 
 
     return (
-    <Box sx={{ display: 'flex', overflow: 'hidden', width:'100%' }}>
+    <Box sx={{ display: 'flex', overflow: 'hidden' }}>
         <Sidebar open={open} toggleDrawer={toggleDrawer} />
         <Navbar title={"Leads"} open={open} toggle={toggleDrawer}/>
+        <Box
+                component="main"
+                sx={{
+                    flexGrow: 1,
+                    transition: 'margin 0.3s ease, width 0.3s ease',
+                    marginLeft: open ? '10px' : '0px', // Adjusting margin based on sidebar width
+                    width: open ? 'calc(100% - 250px)' : 'calc(100% - 56px)', // Adjusting width dynamically
+                    overflow: 'hidden',
+                }}
+            >
         <LeadTable/>
+        </Box>
     </Box>
   )
 }

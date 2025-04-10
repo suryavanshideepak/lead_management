@@ -1,5 +1,5 @@
 import React, {  useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Grid2 } from "@mui/material";
 import Sidebar from "./Sidebar";
 import '../../App.css';
 import Navbar from "../nav/Navbar";
@@ -17,8 +17,18 @@ const Dashboard = ({title}) => {
     <Box sx={{ display: 'flex' }}>
       <Sidebar open={open} toggleDrawer={toggleDrawer} />
       <Navbar title={"Dashboard"} open={open} toggle={toggleDrawer}/>
-      <UserSalesChart />
-      <SalesChart/>
+      <Box>
+        <Grid2 container>
+          <Grid2 item sx={4}>
+           <UserSalesChart />
+          </Grid2>
+          <Grid2 item sx={4}>
+            <SalesChart/>
+          </Grid2>
+        </Grid2>
+
+      </Box>
+      
     </Box>
   );
 };
