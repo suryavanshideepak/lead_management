@@ -31,9 +31,9 @@ const Navbar = ({ toggle, title="" }) => {
 
           <Box display="flex" alignItems="center" gap={2}>
             <IconButton color="inherit">
-              <Badge badgeContent={3} color="error">
+              {/* <Badge badgeContent={3} color="error">
                 <NotificationsIcon />
-              </Badge>
+              </Badge> */}
             </IconButton>
 
             <IconButton color="inherit">

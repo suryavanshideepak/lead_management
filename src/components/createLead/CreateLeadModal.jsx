@@ -11,6 +11,8 @@ const CreateLeadModal = ({ open, onClose, onSubmit }) => {
     altPhone: "",
     name: "",
     address: "",
+    price:'2499',
+    quantity:'1',
     city: "",
     state: "",
     pincode: "",
@@ -46,18 +48,22 @@ const CreateLeadModal = ({ open, onClose, onSubmit }) => {
           Create Order
         </Typography>
         <Box display={'flex'} justifyContent={'space-between'}>
-            <TextField  margin="dense" label="Name" name="name" required onChange={handleChange} />
-            <TextField margin="dense" label="Email" name="email" onChange={handleChange} />
+            <TextField fullWidth margin="dense" label="Name" name="name" required onChange={handleChange} />
+            <TextField fullWidth margin="dense" label="Email" name="email" onChange={handleChange} />
         </Box>
         <Box display={'flex'} justifyContent={'space-between'}>
-            <TextField margin="dense" label="Phone" name="phone" onChange={handleChange} />
-            <TextField margin="dense" label="Alternate Phone" name="altPhone" onChange={handleChange} />
+            <TextField fullWidth margin="dense" label="Phone" name="phone" onChange={handleChange} />
+            <TextField fullWidth margin="dense" label="Alternate Phone" name="altPhone" onChange={handleChange} />
         </Box>
         
         <TextField rows={4} fullWidth multiline margin="dense" label="Address" name="address" onChange={handleChange} />
         <Box display={'flex'} justifyContent={'space-between'}>
-            <TextField margin="dense" label="City" name="city" onChange={handleChange} />
-            <TextField margin="dense" label="State" name="state" onChange={handleChange} />
+            <TextField fullWidth margin="dense" label="City" name="city" onChange={handleChange} />
+            <TextField fullWidth margin="dense" label="State" name="state" onChange={handleChange} />
+        </Box>
+        <Box display={'flex'} justifyContent={'space-between'}>
+            <TextField fullWidth margin="dense" value={leadData.price} label="Price" name="price" onChange={handleChange} />
+            <TextField fullWidth margin="dense" value={leadData.quantity} label="Quantity" name="quantity" onChange={handleChange} />
         </Box>
         <TextField fullWidth margin="dense" label="Pincode" name="pincode" onChange={handleChange} />
         <TextField fullWidth margin="dense" label="Product" name="product" onChange={handleChange} />

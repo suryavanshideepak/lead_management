@@ -202,8 +202,8 @@ const LeadTable = () => {
       Cell: ({ cell }) =>(getAssigneeName(cell.row.original, allAssignee?.assigneeData, allUsers?.users))
     },
     { 
-      accessorKey: "email", 
-      header: "Email",
+      accessorKey: "price", 
+      header: "Price",
       size: 200,
       Cell: ({ cell }) => (
         <Typography color="textSecondary">{cell.getValue()}</Typography>
@@ -277,7 +277,8 @@ const LeadTable = () => {
       sx={{
         flexGrow: 1,
         p: 3,
-        mt: 8,
+        mt: 6,
+        mb:1,
         transition: 'width 0.3s ease, margin 0.3s ease',
         width:'97%',
         height:'85vh'
@@ -410,12 +411,12 @@ const LeadTable = () => {
               border: `1px solid ${theme.palette.divider}`,
               borderRadius: 2,
               overflow: 'auto',
-              height:'80vh'
+              height:'70vh'
             }
           }}
           muiTableContainerProps={{
             sx: {
-              maxHeight: '56vh',
+              maxHeight: '50vh',
               overflow: 'auto',
             },
           }}

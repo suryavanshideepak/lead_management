@@ -184,7 +184,7 @@ const User = () => {
             }}
             muiTableHeadCellProps={{
               sx: {
-                backgroundColor: '#d3d3d3',
+                backgroundColor: '#32de84',
                 fontWeight: '600',
                 color: theme.palette.text.primary,
                 borderBottom: `1px solid ${theme.palette.divider}`,

@@ -17,6 +17,8 @@ const ViewEditLead = ({ open, onClose, onSubmit, isViewLeadModal, leadDetails })
     pincode: "",
     product: "",
     desposition: "New",
+    price:'',
+    quantity:'',
   });
 
   const handleChange = (e) => {
@@ -42,6 +44,8 @@ useEffect(() => {
         pincode: leadDetails.pincode || "",
         product: leadDetails.product || "",
         desposition: leadDetails.desposition || "New",
+        price:leadDetails.price || '2499',
+        quantity: leadDetails.quantity || '1'
       });
     }
   }, [leadDetails]);
@@ -76,6 +80,10 @@ useEffect(() => {
         <Box display={'flex'} justifyContent={'space-between'}>
             <TextField disabled={isViewLeadModal} value={leadData.city} margin="dense" label="City" name="city" onChange={handleChange} />
             <TextField disabled={isViewLeadModal} value={leadData.state} margin="dense" label="State" name="state" onChange={handleChange} />
+        </Box>
+        <Box display={'flex'} justifyContent={'space-between'}>
+            <TextField fullWidth margin="dense" value={leadData.price} label="Price" name="price" onChange={handleChange} />
+            <TextField fullWidth margin="dense" value={leadData.quantity} label="Quantity" name="quantity" onChange={handleChange} />
         </Box>
         <TextField disabled={isViewLeadModal} value={leadData.pincode} fullWidth margin="dense" label="Pincode" name="pincode" onChange={handleChange} />
         <TextField disabled={isViewLeadModal} value={leadData.product} fullWidth margin="dense" label="Product" name="product" onChange={handleChange} />
