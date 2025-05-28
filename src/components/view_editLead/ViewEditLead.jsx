@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Box, TextField, Button, MenuItem, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 
 
-const dispositions = ["New", "Order Placed", "Delivered", "Callback", "Ringing", "Not Connected", "Switch off"];
+const dispositions = ["New", "Order Placed", "Delivered", "Callback", "Ringing", "Not Connected", "Switch off","Order Verified","Cancel"];
 
 const ViewEditLead = ({ open, onClose, onSubmit, isViewLeadModal, leadDetails }) => {
+  const { user } = useSelector((state) => state.auth)
+  const isAdmin = user.role === 'ADMIN' 
+  const visibleDesposition = isAdmin ? dispositions : dispositions.filter((item, index) => !["Order Verified", "Cancel"].includes(item))
   const [leadData, setLeadData] = useState({
     id:"",
     email: "",
@@ -98,7 +102,7 @@ useEffect(() => {
           onChange={handleChange}
           disabled={isViewLeadModal}
         >
-          {dispositions.map((status) => (
+          {visibleDesposition.map((status) => (
             <MenuItem key={status} value={status}>
               {status}
             </MenuItem>

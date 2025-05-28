@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Modal, Box, TextField, Button, MenuItem, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 
 
-const dispositions = ["New", "Order Placed", "Delivered", "Callback", "Ringing", "Not Connected", "Switch off"];
+const dispositions = ["New", "Order Placed", "Delivered", "Callback", "Ringing", "Not Connected", "Switch off","Order Verified","Cancel"];
 
 const CreateLeadModal = ({ open, onClose, onSubmit }) => {
+  const { user } = useSelector((state) => state.auth)
+  const isAdmin = user.role === 'ADMIN' 
+  const visibleDesposition = isAdmin ? dispositions : dispositions.filter((item, index) => !["Order Verified", "Cancel"].includes(item))
   const [leadData, setLeadData] = useState({
     email: "",
     phone: "",
@@ -77,7 +81,7 @@ const CreateLeadModal = ({ open, onClose, onSubmit }) => {
           value={leadData.desposition}
           onChange={handleChange}
         >
-          {dispositions.map((status) => (
+          {visibleDesposition.map((status) => (
             <MenuItem key={status} value={status}>
               {status}
             </MenuItem>

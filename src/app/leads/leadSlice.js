@@ -118,12 +118,25 @@ export const getAllAssignee = createAsyncThunk(
       }
     }
   );
+
+  export const getAllTotalOrders = createAsyncThunk(
+    'leads/getAllTotalOrders',
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await API.get(`http://localhost:4500/leads/getAllTotalOrders`); 
+        return response.data;
+      } catch (err) {
+        return rejectWithValue(err.response?.data || err.message);
+      }
+    }
+  )
   
 
 const initialState = {
     allLeads:[],
     allAssignee:[],
-    allEmployeeLeads:[]
+    allEmployeeLeads:[],
+    totalVarifiedOrder:{}
 }
 
 export const leadSlice = createSlice({
@@ -141,6 +154,9 @@ export const leadSlice = createSlice({
       builder.addCase(getLeadsForEmployee.fulfilled,(state, action) => {
         state.allEmployeeLeads = action?.payload
     })
+    builder.addCase(getAllTotalOrders.fulfilled,(state, action) => {
+      state.totalVarifiedOrder = action?.payload
+  })
     }
 })
 
