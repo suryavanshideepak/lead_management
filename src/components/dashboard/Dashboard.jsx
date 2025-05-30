@@ -29,13 +29,13 @@ const Dashboard = ({ title }) => {
       <Box width={'100%'} display={'flex'} justifyContent={'center'} alignItems={'center'} flexDirection={'column'}>
 
         <DashboardCards/>
-        <Box sx={{ display: 'flex', justifyContent: 'center',width:'100%',p:5 }}>
-          <Grid2 container  sx={{ width: '100%' }}>
-            <Grid2 item xs={12} sm={6} md={6} sx={{ width: '50%' }}>
-                <UserSalesChart />
+        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', p: 5 }}>
+          <Grid2 container spacing={2} >
+            <Grid2 item xs={12} md={6} sx={{ width:'100%',padding:5 }}>
+              <UserSalesChart />
             </Grid2>
-            <Grid2 item xs={12} sm={6} md={6} sx={{ width: '50%' }}>
-                <SalesChart />
+            <Grid2 item xs={12} md={6} sx={{ width:'100%',padding:5 }}>
+              <SalesChart />
             </Grid2>
           </Grid2>
         </Box>
