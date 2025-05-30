@@ -6,7 +6,7 @@ export const getAllLeads = createAsyncThunk(
     'user/getAllLeads',
     async ({ page = 1, limit = 10, search = '', desposition = '',fromDate, toDate, userId }, { rejectWithValue }) => {
       try {
-        const response = await API.get('http://localhost:4500/leads/getAllLeads', {
+        const response = await API.get(`${process.env.REACT_APP_API_BASE_URL}/leads/getAllLeads`, {
             params: { 
               page, 
               limit, 
@@ -28,7 +28,7 @@ export const getAllLeads = createAsyncThunk(
     'user/getLeadsForEmployee',
     async ({ page = 1, limit = 10, search = '', desposition = '',fromDate, toDate, userId }, { rejectWithValue }) => {
       try {
-        const response = await API.get(`http://localhost:4500/leads/getLeadsByEmployeeId/${userId}`, {
+        const response = await API.get(`${process.env.REACT_APP_API_BASE_URL}/leads/getLeadsByEmployeeId/${userId}`, {
             params: { 
               page, 
               limit, 
@@ -51,7 +51,7 @@ export const getLeadById = createAsyncThunk(
   'user/getLeadById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await API.get(`http://localhost:4500/leads/getLeadById/${id}`); 
+      const response = await API.get(`${process.env.REACT_APP_API_BASE_URL}/leads/getLeadById/${id}`); 
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -63,7 +63,7 @@ export const updateLead = createAsyncThunk(
   'user/updateLead',
   async ({ id ,payload }, { rejectWithValue }) => {
     try {
-      const response = await API.put(`http://localhost:4500/leads/updateLead/${id}`,payload); 
+      const response = await API.put(`${process.env.REACT_APP_API_BASE_URL}/leads/updateLead/${id}`,payload); 
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -75,7 +75,7 @@ export const assignLead = createAsyncThunk(
   'user/assignLead',
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await API.post(`http://localhost:4500/leads/assignLead`,payload); 
+      const response = await API.post(`${process.env.REACT_APP_API_BASE_URL}/leads/assignLead`,payload); 
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -87,7 +87,7 @@ export const getAllAssignee = createAsyncThunk(
   'user/getAllAssignee',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await API.get(`http://localhost:4500/leads/getAllAssignee`); 
+      const response = await API.get(`${process.env.REACT_APP_API_BASE_URL}/leads/getAllAssignee`); 
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -99,7 +99,7 @@ export const getAllAssignee = createAsyncThunk(
     'user/createOrder',
     async (payload, { rejectWithValue }) => {
       try {
-        const response = await API.post('http://localhost:4500/leads/createLead', payload); 
+        const response = await API.post(`${process.env.REACT_APP_API_BASE_URL}/leads/createLead`, payload); 
         return response.data;
       } catch (err) {
         return rejectWithValue(err.response?.data || err.message);
@@ -111,7 +111,7 @@ export const getAllAssignee = createAsyncThunk(
     'user/importLeadsFromCsv',
     async (payload, { rejectWithValue }) => {
       try {
-        const response = await API.post('http://localhost:4500/leads/importLeadsFromCsv', payload); 
+        const response = await API.post(`${process.env.REACT_APP_API_BASE_URL}/leads/importLeadsFromCsv`, payload); 
         return response.data;
       } catch (err) {
         return rejectWithValue(err.response?.data || err.message);
@@ -123,7 +123,7 @@ export const getAllAssignee = createAsyncThunk(
     'leads/getAllTotalOrders',
     async (_, { rejectWithValue }) => {
       try {
-        const response = await API.get(`http://localhost:4500/leads/getAllTotalOrders`); 
+        const response = await API.get(`${process.env.REACT_APP_API_BASE_URL}/leads/getAllTotalOrders`); 
         return response.data;
       } catch (err) {
         return rejectWithValue(err.response?.data || err.message);

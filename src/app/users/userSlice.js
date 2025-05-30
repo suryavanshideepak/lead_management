@@ -6,7 +6,7 @@ export const forgotPassword = createAsyncThunk(
     'user/forgotPassword',
     async (payload, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:4500/user/forgotPassword', payload);
+            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/forgotPassword`, payload);
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data || err.message);
@@ -17,7 +17,7 @@ export const forgotPassword = createAsyncThunk(
 export const getAllUser = createAsyncThunk(
     'user/getAllUser',async(_,{rejectWithValue}) => {
         try {
-            const response = await API.get('http://localhost:4500/user/getAllUser');
+            const response = await API.get(`${process.env.REACT_APP_API_BASE_URL}/user/getAllUser`);
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data || err.message);
@@ -28,7 +28,7 @@ export const getAllUser = createAsyncThunk(
 export const addUser = createAsyncThunk(
     'user/addUser',async(payload,{rejectWithValue}) => {
         try {
-            const response = await API.post('http://localhost:4500/user/createUser',payload);
+            const response = await API.post(`${process.env.REACT_APP_API_BASE_URL}/user/createUser`,payload);
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data || err.message);
@@ -40,7 +40,7 @@ export const removeUser = createAsyncThunk(
     'user/removeUser',async(id,{rejectWithValue}) => {
         console.log(id)
         try {
-            const response = await API.delete(`http://localhost:4500/user/removeUser?userId=${id}`);
+            const response = await API.delete(`${process.env.REACT_APP_API_BASE_URL}/user/removeUser?userId=${id}`);
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data || err.message);
