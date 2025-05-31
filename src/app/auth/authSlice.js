@@ -6,7 +6,6 @@ export const loginAction = createAsyncThunk(
     'user/login',
     async(payload, { rejectWithValue }) => {
         try{
-            console.log(process.env.REACT_APP_API_BASE_URL)
             const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/login`,payload)
             return response.data
         }catch(err){

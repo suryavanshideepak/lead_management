@@ -12,7 +12,8 @@ const DashboardCards = () => {
               <Card sx={{ width: '300px', backgroundColor: '#61dafb' }}>
                 <CardContent sx={{display:'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}}>
                     <Typography variant='h3' >Verified Orders</Typography>
-                    <Typography variant='p' paddingY={2}>{totalVarifiedOrder?.totalOrders}</Typography>
+                    <Typography variant='p' paddingY={2}>Last 30 Days :- {totalVarifiedOrder?.totalOrders}</Typography>
+                    <Typography variant='p' paddingY={2}>Today :- {totalVarifiedOrder?.today?.totalOrders}</Typography>
                 </CardContent>
               </Card>
             </Grid2>
@@ -20,7 +21,8 @@ const DashboardCards = () => {
               <Card sx={{ width: '300px', backgroundColor: '#ffff7a' }}>
                 <CardContent sx={{display:'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}} >
                     <Typography variant='h3'>Total Price</Typography>
-                    <Typography variant='p' paddingY={2}>{totalVarifiedOrder?.totalPrice}</Typography>
+                    <Typography variant='p' paddingY={2}>Last 30 Days :- {totalVarifiedOrder?.totalPrice}</Typography>
+                    <Typography variant='p' paddingY={2}>Today :- {totalVarifiedOrder?.today?.totalOrders}</Typography>
                 </CardContent>
               </Card>
             </Grid2>
@@ -28,7 +30,8 @@ const DashboardCards = () => {
               <Card sx={{ width: '300px', backgroundColor: '#65ff65' }}>
                 <CardContent sx={{display:'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}}>
                     <Typography variant='h3'>Ticket Size</Typography>
-                    <Typography variant='p' paddingY={2}>{totalVarifiedOrder?.averageTicketSize}</Typography>
+                    <Typography variant='p' paddingY={2}>Last 30 Days :- {totalVarifiedOrder?.averageTicketSize}</Typography>
+                    <Typography variant='p' paddingY={2}>Today :- {totalVarifiedOrder?.today?.totalOrders}</Typography>
                 </CardContent>
               </Card>
             </Grid2>
@@ -36,7 +39,8 @@ const DashboardCards = () => {
               <Card sx={{ width: '300px', backgroundColor: '#b2a999' }}>
                 <CardContent sx={{display:'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}}>
                   <Typography variant="h3">Total Orders</Typography>
-                  <Typography variant='p' paddingY={2}>{totalVarifiedOrder?.totalOrders}</Typography>
+                  <Typography variant='p' paddingY={2}>Last 30 Days :- {totalVarifiedOrder?.totalOrders}</Typography>
+                  <Typography variant='p' paddingY={2}>Today :- {totalVarifiedOrder?.today?.totalOrders}</Typography>
                 </CardContent>
               </Card>
             </Grid2>
