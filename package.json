@@ -34,6 +34,12 @@
     "xlsx": "^0.18.5",
     "yup": "^1.6.1"
   },
+  "overrides": {
+    "@mui/system": "^6.4.2",
+    "@mui/utils": "^6.4.2",
+    "@mui/private-theming": "^6.4.2",
+    "@mui/styled-engine": "^6.4.2"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

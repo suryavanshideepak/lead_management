@@ -1,11 +1,8 @@
 {
-  "build": {
-    "env": {
-      "NODE_OPTIONS": "--legacy-peer-deps",
-      "REACT_APP_API_BASE_URL": "@REACT_APP_API_BASE_URL"
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  },
-  "env": {
-    "REACT_APP_API_BASE_URL": "@REACT_APP_API_BASE_URL"
-  }
+  ]
 }
