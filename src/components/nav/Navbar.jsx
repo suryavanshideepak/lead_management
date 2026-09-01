@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Badge, Box, IconButton, Toolbar, Typography } from '@mui/material';
-import { Notifications as NotificationsIcon } from "@mui/icons-material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react'
 import { useSelector } from 'react-redux';

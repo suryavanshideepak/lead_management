@@ -1,6 +1,10 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Box } from '@mui/material';
-import { Dashboard,PersonRounded, Settings, Logout, Close } from '@mui/icons-material';
+import Dashboard from '@mui/icons-material/Dashboard';
+import PersonRounded from '@mui/icons-material/PersonRounded';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
+import Close from '@mui/icons-material/Close';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import { Link, useNavigate } from 'react-router-dom';
 import { logoutAction, selectAuthState } from '../../app/auth/authSlice';
