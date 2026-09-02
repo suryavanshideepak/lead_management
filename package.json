@@ -5,10 +5,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/base": "^5.0.0-beta.70",
     "@mui/icons-material": "^6.4.2",
     "@mui/material": "^6.4.2",
-    "@mui/x-data-grid": "^7.24.1",
     "@mui/x-date-pickers": "^7.28.3",
     "@reduxjs/toolkit": "^2.5.1",
     "@testing-library/jest-dom": "^5.17.0",
@@ -41,6 +39,7 @@
     "@mui/styled-engine": "^6.4.2"
   },
   "scripts": {
+    "postinstall": "node scripts/fix-mui-utils.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
