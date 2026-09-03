@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, Card, CardContent, Typography, Grid2 } from "@mui/material";
+import React, { useEffect } from "react";
+import { Box, Grid2 } from "@mui/material";
 import Sidebar from "./Sidebar";
 import '../../App.css';
 import Navbar from "../nav/Navbar";
@@ -10,7 +10,7 @@ import { sidebarCollapse } from "../../app/users/userSlice";
 import DashboardCards from "./DashboardCards";
 import { getAllTotalOrders } from "../../app/leads/leadSlice";
 
-const Dashboard = ({ title }) => {
+const Dashboard = () => {
   const { isOpen } = useSelector(state => state.user);
   const dispatch = useDispatch();
 

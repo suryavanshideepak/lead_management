@@ -5,7 +5,7 @@ import SearchBar from '../searchComponent/SearchBar'
 import DispositionFilter from '../SelectComponent/DispositionFilter'
 import { DatePicker } from '@mui/x-date-pickers'
 import { useDispatch, useSelector } from 'react-redux'
-import { createOrder, getAllAssignee, getAllLeads, getLeadsForEmployee, updateLead } from '../../app/leads/leadSlice'
+import { createOrder, getLeadsForEmployee, updateLead } from '../../app/leads/leadSlice'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import dayjs from 'dayjs'
@@ -93,16 +93,19 @@ const EmployeeLeadTable = () => {
   
     useEffect(() => {
       fetchAllLeads()
-    },[dispatch, pagination.pageIndex, pagination.pageSize,])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[dispatch, pagination.pageIndex, pagination.pageSize])
   
     useEffect(() => {
       fetchAllLeads()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },[fromDate,toDate,employee])
     
     useEffect(() => {
       if(isRefreshTable){
         fetchAllLeads()
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },[isRefreshTable])
 
     const columns = [

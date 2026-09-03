@@ -57,14 +57,14 @@ const User = () => {
 
   useEffect(() => {
     dispatch(getAllUser())
-  },[])
+  },[dispatch])
 
   useEffect(() => {
     if(isRefresh){
       dispatch(getAllUser())
       setIsRefresh(false)
     }   
-  },[isRefresh])
+  },[isRefresh, dispatch])
 
   const columns = [
     { 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import LeadTable from '../../components/leadTable/LeadTable'
 import { Box } from '@mui/material'
 import Sidebar from '../../components/dashboard/Sidebar'

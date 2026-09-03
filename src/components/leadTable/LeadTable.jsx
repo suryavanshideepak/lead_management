@@ -149,10 +149,12 @@ const LeadTable = () => {
     fetchAllLeads()
     dispatch(getAllUser())
     dispatch(getAllAssignee())
-  },[dispatch, pagination.pageIndex, pagination.pageSize,])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[dispatch, pagination.pageIndex, pagination.pageSize])
 
   useEffect(() => {
     fetchAllLeads()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[fromDate,toDate,employee])
   
   useEffect(() => {
@@ -160,6 +162,7 @@ const LeadTable = () => {
       dispatch(getAllAssignee())
       fetchAllLeads()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[isRefreshTable])
 
   const columns = [
