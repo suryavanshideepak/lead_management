@@ -48,9 +48,9 @@ const SalesChart = () => {
     <Paper
       elevation={0}
       sx={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'background.paper',
         borderRadius: '14px',
-        border: '1px solid #e2e8f0',
+        border: (theme) => `1px solid ${theme.palette.divider}`,
         boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
         p: { xs: 1.5, sm: 1.75 },
         height: '100%',
@@ -59,7 +59,7 @@ const SalesChart = () => {
         justifyContent: 'space-between',
         transition: 'all 0.25s ease',
         '&:hover': {
-          borderColor: '#cbd5e1',
+          borderColor: 'primary.main',
           boxShadow: '0 4px 12px 0 rgba(0, 0, 0, 0.05)',
         },
       }}
@@ -67,10 +67,10 @@ const SalesChart = () => {
       {/* Header */}
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 1 }}>
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 700, color: '#0f172a', fontSize: '0.925rem', lineHeight: 1.25 }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary', fontSize: '0.925rem', lineHeight: 1.25 }}>
             Profit vs. Loss
           </Typography>
-          <Typography variant="body2" sx={{ color: '#64748b', fontSize: '0.725rem', mt: 0.25 }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.725rem', mt: 0.25 }}>
             Ratio of closed profitable deals
           </Typography>
         </Box>
@@ -141,25 +141,25 @@ const SalesChart = () => {
         sx={{
           pt: 1,
           mt: 0.5,
-          borderTop: '1px solid #f1f5f9',
+          borderTop: (theme) => `1px solid ${theme.palette.divider}`,
         }}
       >
         <Stack direction="row" alignItems="center" spacing={0.75}>
           <FiberManualRecordIcon sx={{ fontSize: 10, color: '#10b981' }} />
-          <Typography variant="body2" sx={{ fontWeight: 600, color: '#334155', fontSize: '0.78rem' }}>
+          <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.78rem' }}>
             Profit: 4
           </Typography>
-          <Typography variant="caption" sx={{ color: '#94a3b8', fontSize: '0.72rem' }}>
+          <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
             (80%)
           </Typography>
         </Stack>
 
         <Stack direction="row" alignItems="center" spacing={0.75}>
           <FiberManualRecordIcon sx={{ fontSize: 10, color: '#f43f5e' }} />
-          <Typography variant="body2" sx={{ fontWeight: 600, color: '#334155', fontSize: '0.78rem' }}>
+          <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary', fontSize: '0.78rem' }}>
             Loss: 1
           </Typography>
-          <Typography variant="caption" sx={{ color: '#94a3b8', fontSize: '0.72rem' }}>
+          <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
             (20%)
           </Typography>
         </Stack>

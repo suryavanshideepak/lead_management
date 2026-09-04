@@ -426,9 +426,9 @@ const EmployeeLeadTable = () => {
       <Card
         sx={{
           mb: 2,
-          backgroundColor: '#ffffff',
+          backgroundColor: 'background.paper',
           borderRadius: '14px',
-          border: '1px solid #e2e8f0',
+          border: (theme) => `1px solid ${theme.palette.divider}`,
           boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.04)',
         }}
       >
@@ -454,10 +454,10 @@ const EmployeeLeadTable = () => {
                         height: '38px',
                         borderRadius: '8px',
                         fontSize: '0.825rem',
-                        backgroundColor: '#f8fafc',
-                        '& fieldset': { borderColor: '#e2e8f0' },
-                        '&:hover fieldset': { borderColor: '#cbd5e1' },
-                        '&.Mui-focused fieldset': { borderColor: '#10b981' },
+                        backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
+                        '& fieldset': { borderColor: 'divider' },
+                        '&:hover fieldset': { borderColor: 'primary.main' },
+                        '&.Mui-focused fieldset': { borderColor: 'primary.main' },
                       },
                     },
                   },
@@ -478,10 +478,10 @@ const EmployeeLeadTable = () => {
                         height: '38px',
                         borderRadius: '8px',
                         fontSize: '0.825rem',
-                        backgroundColor: '#f8fafc',
-                        '& fieldset': { borderColor: '#e2e8f0' },
-                        '&:hover fieldset': { borderColor: '#cbd5e1' },
-                        '&.Mui-focused fieldset': { borderColor: '#10b981' },
+                        backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
+                        '& fieldset': { borderColor: 'divider' },
+                        '&:hover fieldset': { borderColor: 'primary.main' },
+                        '&.Mui-focused fieldset': { borderColor: 'primary.main' },
                       },
                     },
                   },
@@ -513,9 +513,9 @@ const EmployeeLeadTable = () => {
       {/* Main Table Card */}
       <Card
         sx={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'background.paper',
           borderRadius: '16px',
-          border: '1px solid #e2e8f0',
+          border: (theme) => `1px solid ${theme.palette.divider}`,
           boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
           overflow: 'hidden',
         }}
@@ -543,20 +543,20 @@ const EmployeeLeadTable = () => {
           }}
           muiTableHeadCellProps={{
             sx: {
-              backgroundColor: '#f8fafc',
+              backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#0f172a' : '#f8fafc',
               fontWeight: 700,
               fontSize: '0.75rem',
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
-              color: '#475569',
+              color: 'text.secondary',
               py: 1.5,
-              borderBottom: '2px solid #e2e8f0',
+              borderBottom: (theme) => `2px solid ${theme.palette.divider}`,
             },
           }}
           muiTableBodyCellProps={{
             sx: {
-              borderBottom: '1px solid #f1f5f9',
-              color: '#334155',
+              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+              color: 'text.primary',
               fontSize: '0.85rem',
               py: 1.25,
             },
@@ -567,14 +567,14 @@ const EmployeeLeadTable = () => {
                 transition: 'background-color 0.15s ease-in-out',
               },
               '& tr:hover': {
-                backgroundColor: '#f8fafc !important',
+                backgroundColor: (theme) => `${theme.palette.action.hover} !important`,
               },
             },
           }}
           muiBottomToolbarProps={{
             sx: {
-              backgroundColor: '#ffffff',
-              borderTop: '1px solid #f1f5f9',
+              backgroundColor: 'background.paper',
+              borderTop: (theme) => `1px solid ${theme.palette.divider}`,
               py: 1,
             },
           }}

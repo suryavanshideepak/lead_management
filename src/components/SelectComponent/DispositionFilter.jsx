@@ -18,15 +18,24 @@ const DispositionFilter = ({ onFilter }) => {
         value={selectedDisposition}
         onChange={handleChange}
         label="Disposition"
-        MenuProps={{ PaperProps: { sx: { maxHeight: 240, borderRadius: '10px' } } }}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              maxHeight: 240,
+              borderRadius: '10px',
+              backgroundColor: 'background.paper',
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+            },
+          },
+        }}
         sx={{
           height: '38px',
           borderRadius: '8px',
           fontSize: '0.85rem',
-          backgroundColor: '#f8fafc',
-          '& fieldset': { borderColor: '#e2e8f0' },
-          '&:hover fieldset': { borderColor: '#cbd5e1' },
-          '&.Mui-focused fieldset': { borderColor: '#10b981' },
+          backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
+          '& fieldset': { borderColor: 'divider' },
+          '&:hover fieldset': { borderColor: 'primary.main' },
+          '&.Mui-focused fieldset': { borderColor: 'primary.main' },
         }}
       >
         <MenuItem value="">

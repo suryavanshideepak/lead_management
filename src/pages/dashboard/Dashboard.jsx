@@ -44,7 +44,7 @@ const Dashboard = () => {
               variant="h5"
               sx={{
                 fontWeight: 800,
-                color: '#0f172a',
+                color: 'text.primary',
                 letterSpacing: '-0.02em',
                 fontSize: { xs: '1.2rem', sm: '1.35rem' },
               }}
@@ -56,18 +56,18 @@ const Dashboard = () => {
               icon={<FiberManualRecordIcon sx={{ fontSize: '9px !important', color: '#10b981' }} />}
               label="Live Data"
               sx={{
-                backgroundColor: '#ecfdf5',
-                color: '#065f46',
+                backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#064e3b' : '#ecfdf5',
+                color: (theme) => theme.palette.mode === 'dark' ? '#6ee7b7' : '#065f46',
                 fontWeight: 600,
                 fontSize: '0.68rem',
                 height: '20px',
                 borderRadius: '10px',
-                border: '1px solid #a7f3d0',
+                border: (theme) => `1px solid ${theme.palette.mode === 'dark' ? '#047857' : '#a7f3d0'}`,
                 '& .MuiChip-label': { px: 0.75 },
               }}
             />
           </Stack>
-          <Typography variant="body2" sx={{ color: '#64748b', fontSize: '0.78rem', mt: 0.25 }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.78rem', mt: 0.25 }}>
             Real-time summary of verified orders, revenue, and employee performance.
           </Typography>
         </Box>
@@ -75,12 +75,12 @@ const Dashboard = () => {
         {/* Action Controls */}
         <Stack direction="row" alignItems="center" spacing={1} sx={{ alignSelf: { xs: 'stretch', sm: 'auto' } }}>
           <Chip
-            icon={<CalendarTodayOutlinedIcon sx={{ fontSize: '13px !important', color: '#64748b' }} />}
+            icon={<CalendarTodayOutlinedIcon sx={{ fontSize: '13px !important', color: 'text.secondary' }} />}
             label="Last 30 Days"
             sx={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e2e8f0',
-              color: '#334155',
+              backgroundColor: 'background.paper',
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              color: 'text.primary',
               fontWeight: 500,
               fontSize: '0.75rem',
               height: '32px',
@@ -109,16 +109,16 @@ const Dashboard = () => {
               height: '32px',
               px: 1.5,
               borderRadius: '8px',
-              borderColor: '#e2e8f0',
-              backgroundColor: '#ffffff',
-              color: '#334155',
+              borderColor: 'divider',
+              backgroundColor: 'background.paper',
+              color: 'text.primary',
               textTransform: 'none',
               fontWeight: 600,
               fontSize: '0.75rem',
               boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
               '&:hover': {
-                borderColor: '#cbd5e1',
-                backgroundColor: '#f8fafc',
+                borderColor: 'primary.main',
+                backgroundColor: 'action.hover',
               },
             }}
           >

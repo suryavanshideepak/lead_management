@@ -48,6 +48,23 @@ export const removeUser = createAsyncThunk(
     }
 )
 
+export const updateUserProfile = createAsyncThunk(
+    'user/updateProfile',
+    async (payload, { rejectWithValue }) => {
+        try {
+            const response = await API.put(`${process.env.REACT_APP_API_BASE_URL}/user/updateProfile`, payload);
+            return response.data;
+        } catch (err) {
+            try {
+                const fallback = await API.put(`${process.env.REACT_APP_API_BASE_URL}/user/updateUser`, payload);
+                return fallback.data;
+            } catch (e) {
+                return rejectWithValue(err.response?.data || err.message);
+            }
+        }
+    }
+)
+
 const initialState = {
     isForgotPass:false,
     allUsers:[],

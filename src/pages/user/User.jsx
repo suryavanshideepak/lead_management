@@ -199,7 +199,7 @@ const User = () => {
                   sx={{
                     fontWeight: 700,
                     fontSize: '0.88rem',
-                    color: '#0f172a',
+                    color: 'text.primary',
                     lineHeight: 1.3,
                   }}
                 >
@@ -469,7 +469,7 @@ const User = () => {
               variant="h5"
               sx={{
                 fontWeight: 800,
-                color: '#0f172a',
+                color: 'text.primary',
                 letterSpacing: '-0.02em',
                 fontSize: { xs: '1.25rem', sm: '1.45rem' },
               }}
@@ -491,7 +491,7 @@ const User = () => {
               }}
             />
           </Stack>
-          <Typography variant="body2" sx={{ color: '#64748b', fontSize: '0.825rem', mt: 0.25 }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.825rem', mt: 0.25 }}>
             Manage team members, roles, permissions, and account status in real-time.
           </Typography>
         </Box>
@@ -519,16 +519,16 @@ const User = () => {
               height: '36px',
               px: 1.75,
               borderRadius: '9px',
-              borderColor: '#e2e8f0',
-              backgroundColor: '#ffffff',
-              color: '#334155',
+              borderColor: 'divider',
+              backgroundColor: 'background.paper',
+              color: 'text.primary',
               textTransform: 'none',
               fontWeight: 600,
               fontSize: '0.8rem',
               boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
               '&:hover': {
-                borderColor: '#cbd5e1',
-                backgroundColor: '#f8fafc',
+                borderColor: 'primary.main',
+                backgroundColor: 'action.hover',
               },
             }}
           >
@@ -570,9 +570,9 @@ const User = () => {
                 <Card
                   onClick={() => setSelectedTab(stat.key)}
                   sx={{
-                    backgroundColor: '#ffffff',
+                    backgroundColor: 'background.paper',
                     borderRadius: '14px',
-                    border: isSelected ? `2px solid ${stat.accentColor}` : '1px solid #e2e8f0',
+                    border: (theme) => isSelected ? `2px solid ${stat.accentColor}` : `1px solid ${theme.palette.divider}`,
                     boxShadow: isSelected
                       ? '0 8px 20px -4px rgba(0, 0, 0, 0.1)'
                       : '0 1px 3px 0 rgba(0, 0, 0, 0.04)',
@@ -652,9 +652,9 @@ const User = () => {
       {/* Modern Card Frame for Table */}
       <Card
         sx={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'background.paper',
           borderRadius: '16px',
-          border: '1px solid #e2e8f0',
+          border: (theme) => `1px solid ${theme.palette.divider}`,
           boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
           overflow: 'hidden',
           display: 'flex',
@@ -665,8 +665,8 @@ const User = () => {
         <Box
           sx={{
             p: { xs: 1.5, sm: 2 },
-            borderBottom: '1px solid #f1f5f9',
-            backgroundColor: '#ffffff',
+            borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+            backgroundColor: 'background.paper',
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
             justifyContent: 'space-between',
@@ -684,9 +684,9 @@ const User = () => {
                   label={`${tab.label} (${tab.count})`}
                   onClick={() => setSelectedTab(tab.key)}
                   sx={{
-                    backgroundColor: isActive ? '#0f172a' : '#f8fafc',
-                    color: isActive ? '#ffffff' : '#475569',
-                    border: `1px solid ${isActive ? '#0f172a' : '#e2e8f0'}`,
+                    backgroundColor: (theme) => isActive ? theme.palette.primary.main : theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
+                    color: isActive ? '#ffffff' : 'text.secondary',
+                    border: (theme) => `1px solid ${isActive ? theme.palette.primary.main : theme.palette.divider}`,
                     fontWeight: 600,
                     fontSize: '0.75rem',
                     height: '32px',
@@ -694,7 +694,7 @@ const User = () => {
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
                     '&:hover': {
-                      backgroundColor: isActive ? '#1e293b' : '#f1f5f9',
+                      backgroundColor: (theme) => isActive ? theme.palette.primary.dark : theme.palette.action.hover,
                     },
                   }}
                 />
@@ -711,13 +711,13 @@ const User = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon sx={{ fontSize: 18, color: '#94a3b8' }} />
+                  <SearchIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
                 </InputAdornment>
               ),
               endAdornment: searchQuery ? (
                 <InputAdornment position="end">
                   <IconButton size="small" onClick={() => setSearchQuery('')} sx={{ p: 0.25 }}>
-                    <ClearIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
+                    <ClearIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
                   </IconButton>
                 </InputAdornment>
               ) : null,
@@ -728,9 +728,9 @@ const User = () => {
                 height: '36px',
                 borderRadius: '8px',
                 fontSize: '0.825rem',
-                backgroundColor: '#f8fafc',
-                '& fieldset': { borderColor: '#e2e8f0' },
-                '&:hover fieldset': { borderColor: '#cbd5e1' },
+                backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
+                '& fieldset': { borderColor: 'divider' },
+                '&:hover fieldset': { borderColor: 'primary.main' },
                 '&.Mui-focused fieldset': { borderColor: '#10b981', borderWidth: '1.5px' },
               },
             }}
@@ -763,20 +763,20 @@ const User = () => {
             }}
             muiTableHeadCellProps={{
               sx: {
-                backgroundColor: '#f8fafc',
-                color: '#475569',
+                backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#0f172a' : '#f8fafc',
+                color: 'text.secondary',
                 fontWeight: 700,
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 py: 1.5,
-                borderBottom: '2px solid #e2e8f0',
+                borderBottom: (theme) => `2px solid ${theme.palette.divider}`,
               },
             }}
             muiTableBodyCellProps={{
               sx: {
-                borderBottom: '1px solid #f1f5f9',
-                color: '#334155',
+                borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+                color: 'text.primary',
                 fontSize: '0.85rem',
                 py: 1.25,
               },
@@ -787,14 +787,14 @@ const User = () => {
                   transition: 'background-color 0.15s ease-in-out',
                 },
                 '& tr:hover': {
-                  backgroundColor: '#f8fafc !important',
+                  backgroundColor: (theme) => `${theme.palette.action.hover} !important`,
                 },
               },
             }}
             muiBottomToolbarProps={{
               sx: {
-                backgroundColor: '#ffffff',
-                borderTop: '1px solid #f1f5f9',
+                backgroundColor: 'background.paper',
+                borderTop: (theme) => `1px solid ${theme.palette.divider}`,
                 py: 1,
               },
             }}

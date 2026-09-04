@@ -4,9 +4,17 @@ import LoginBackground from './LoginBackground';
 import LoginPage from './LoginPage';
 import { useSelector } from 'react-redux';
 import ForgotPassword from './ForgotPassword';
+import { Navigate } from 'react-router-dom';
 
 const Login = () => {
-  const {isForgotPass} = useSelector(state=> state.user)
+  const { isForgotPass } = useSelector((state) => state.user);
+  const { token, user } = useSelector((state) => state.auth);
+
+  // If already authenticated, redirect away from login to dashboard
+  if (token && user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
     <Box
       sx={{
@@ -25,7 +33,7 @@ const Login = () => {
           height: '100vh',
         }}
       >
-        {isForgotPass ? <ForgotPassword/> : <LoginPage />}
+        {isForgotPass ? <ForgotPassword /> : <LoginPage />}
       </Box>
     </Box>
   );

@@ -14,7 +14,7 @@ const Layout = ({ title = 'Dashboard', children }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', maxHeight: '100vh', overflow: 'hidden', backgroundColor: '#f8fafc' }}>
+    <Box sx={{ display: 'flex', height: '100vh', maxHeight: '100vh', overflow: 'hidden', backgroundColor: 'background.default' }}>
       <Sidebar toggleDrawer={toggleDrawer} />
       <Navbar title={title} toggle={toggleDrawer} />
       <Box

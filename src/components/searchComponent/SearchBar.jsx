@@ -8,7 +8,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearch = debounce((value) => {
     onSearch(value);
-  }, 500); 
+  }, 500);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -28,17 +28,17 @@ const SearchBar = ({ onSearch }) => {
           height: '38px',
           borderRadius: '8px',
           fontSize: '0.85rem',
-          backgroundColor: '#f8fafc',
-          '& fieldset': { borderColor: '#e2e8f0' },
-          '&:hover fieldset': { borderColor: '#cbd5e1' },
-          '&.Mui-focused fieldset': { borderColor: '#10b981' },
+          backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
+          '& fieldset': { borderColor: 'divider' },
+          '&:hover fieldset': { borderColor: 'primary.main' },
+          '&.Mui-focused fieldset': { borderColor: 'primary.main' },
         },
       }}
       slotProps={{
         input: {
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon sx={{ fontSize: 18, color: '#94a3b8' }} />
+              <SearchIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
             </InputAdornment>
           ),
         },

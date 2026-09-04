@@ -69,17 +69,17 @@ const DashboardCards = () => {
             <Card
               sx={{
                 height: '100%',
-                backgroundColor: '#ffffff',
+                backgroundColor: 'background.paper',
                 borderRadius: '12px',
-                border: '1px solid #e2e8f0',
+                border: (theme) => `1px solid ${theme.palette.divider}`,
                 boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
                 transition: 'all 0.2s ease-in-out',
                 position: 'relative',
                 overflow: 'hidden',
                 '&:hover': {
                   transform: 'translateY(-2px)',
-                  boxShadow: '0 6px 14px -3px rgba(0, 0, 0, 0.07)',
-                  borderColor: '#cbd5e1',
+                  boxShadow: (theme) => theme.palette.mode === 'dark' ? '0 8px 20px -4px rgba(0, 0, 0, 0.4)' : '0 6px 14px -3px rgba(0, 0, 0, 0.07)',
+                  borderColor: 'primary.main',
                 },
                 '&::before': {
                   content: '""',
@@ -99,7 +99,7 @@ const DashboardCards = () => {
                     <Typography
                       variant="caption"
                       sx={{
-                        color: '#64748b',
+                        color: 'text.secondary',
                         fontWeight: 600,
                         letterSpacing: '0.03em',
                         textTransform: 'uppercase',
@@ -112,7 +112,7 @@ const DashboardCards = () => {
                     <Typography
                       variant="h6"
                       sx={{
-                        color: '#0f172a',
+                        color: 'text.primary',
                         fontWeight: 700,
                         fontSize: { xs: '1.25rem', sm: '1.4rem' },
                         lineHeight: 1.2,
@@ -127,7 +127,7 @@ const DashboardCards = () => {
                       width: 32,
                       height: 32,
                       borderRadius: '8px',
-                      backgroundColor: card.iconBg,
+                      backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.06)' : card.iconBg,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -145,16 +145,16 @@ const DashboardCards = () => {
                   sx={{
                     pt: 1,
                     mt: 1,
-                    borderTop: '1px solid #f1f5f9',
+                    borderTop: (theme) => `1px solid ${theme.palette.divider}`,
                   }}
                 >
                   <Chip
                     size="small"
-                    icon={<TrendingUpIcon sx={{ fontSize: '12px !important', color: '#059669' }} />}
+                    icon={<TrendingUpIcon sx={{ fontSize: '12px !important', color: '#10b981' }} />}
                     label={`Today: ${card.today}`}
                     sx={{
-                      backgroundColor: '#f1f5f9',
-                      color: '#334155',
+                      backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f1f5f9',
+                      color: 'text.primary',
                       fontWeight: 600,
                       fontSize: '0.68rem',
                       height: '20px',
@@ -162,7 +162,7 @@ const DashboardCards = () => {
                       '& .MuiChip-label': { px: 0.75 },
                     }}
                   />
-                  <Typography variant="caption" sx={{ color: '#94a3b8', fontSize: '0.675rem', fontWeight: 500 }}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.675rem', fontWeight: 500 }}>
                     Last 30 Days
                   </Typography>
                 </Stack>
