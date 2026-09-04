@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Box, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import * as Papa from "papaparse";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 
 const CsvUploader = ({ onFileUpload }) => {
   const [fileName, setFileName] = useState("");
@@ -15,7 +15,7 @@ const CsvUploader = ({ onFileUpload }) => {
 
     Papa.parse(file, {
       complete: (result) => {
-        const filteredData = result.data.filter(row => row.name.trim() !== "");
+        const filteredData = result.data.filter(row => row.name && row.name.trim() !== "");
         onFileUpload(filteredData);
       },
       header: true,
@@ -29,29 +29,32 @@ const CsvUploader = ({ onFileUpload }) => {
   });
 
   return (
-    <Box
-      {...getRootProps()}
-      sx={{
-        display:'flex',
-        border: "1px solid #32de84",
-        padding: '0px 40px',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: "center",
-        borderRadius: "8px",
-        cursor: "pointer",
-        backgroundColor: "#f9f9f9",
-        "&:hover": { backgroundColor: "#e3f2fd" },
-      }}
-    >
-    <Typography sx={{color:'#32de84'}}>Import</Typography>
+    <Box {...getRootProps()} sx={{ display: "inline-block", width: { xs: "100%", sm: "auto" } }}>
       <input {...getInputProps()} />
-      <CloudUploadIcon sx={{color:'#32de84', marginRight:2,marginLeft:2}}  fontSize="large" />
-      {fileName && (
-        <Typography variant="body2" mt={1} color="textSecondary">
-          Selected: {fileName}
-        </Typography>
-      )}
+      <Button
+        variant="outlined"
+        size="small"
+        startIcon={<UploadFileOutlinedIcon sx={{ fontSize: '18px !important', color: '#2563eb' }} />}
+        sx={{
+          height: '36px',
+          px: 2,
+          borderRadius: '9px',
+          borderColor: '#e2e8f0',
+          backgroundColor: '#ffffff',
+          color: '#334155',
+          textTransform: 'none',
+          fontWeight: 600,
+          fontSize: '0.8rem',
+          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+          width: '100%',
+          '&:hover': {
+            borderColor: '#cbd5e1',
+            backgroundColor: '#f8fafc',
+          },
+        }}
+      >
+        {fileName ? `Imported: ${fileName.slice(0, 14)}...` : 'Import CSV'}
+      </Button>
     </Box>
   );
 };

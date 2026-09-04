@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './components/Login/Login';
-import Dashboard from './components/dashboard/Dashboard';
+import Dashboard from './pages/dashboard/Dashboard';
 import User from './pages/user/User';
 import PrivateRoute from './routes/PrivateRoutes';
 import Leads from './pages/Leads/Leads';

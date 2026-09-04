@@ -12,16 +12,28 @@ const DispositionFilter = ({ onFilter }) => {
   };
 
   return (
-    <FormControl variant="outlined" sx={{ minWidth: 200, marginBottom: 2 }} size="small">
-      <InputLabel>Disposition</InputLabel>
+    <FormControl variant="outlined" fullWidth size="small">
+      <InputLabel sx={{ fontSize: '0.85rem' }}>Disposition</InputLabel>
       <Select
         value={selectedDisposition}
         onChange={handleChange}
         label="Disposition"
-        MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
+        MenuProps={{ PaperProps: { sx: { maxHeight: 240, borderRadius: '10px' } } }}
+        sx={{
+          height: '38px',
+          borderRadius: '8px',
+          fontSize: '0.85rem',
+          backgroundColor: '#f8fafc',
+          '& fieldset': { borderColor: '#e2e8f0' },
+          '&:hover fieldset': { borderColor: '#cbd5e1' },
+          '&.Mui-focused fieldset': { borderColor: '#10b981' },
+        }}
       >
+        <MenuItem value="">
+          <em>All Dispositions</em>
+        </MenuItem>
         {dispositions.map((item) => (
-          <MenuItem key={item} value={item}>
+          <MenuItem key={item} value={item} sx={{ fontSize: '0.85rem' }}>
             {item}
           </MenuItem>
         ))}

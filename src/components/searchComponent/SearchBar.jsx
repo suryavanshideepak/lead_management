@@ -20,17 +20,28 @@ const SearchBar = ({ onSearch }) => {
       label="Search Leads"
       size="small"
       variant="outlined"
+      fullWidth
       value={searchTerm}
       onChange={handleChange}
-      sx={{ marginBottom: 2 }}
+      sx={{
+        '& .MuiOutlinedInput-root': {
+          height: '38px',
+          borderRadius: '8px',
+          fontSize: '0.85rem',
+          backgroundColor: '#f8fafc',
+          '& fieldset': { borderColor: '#e2e8f0' },
+          '&:hover fieldset': { borderColor: '#cbd5e1' },
+          '&.Mui-focused fieldset': { borderColor: '#10b981' },
+        },
+      }}
       slotProps={{
         input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          },
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon sx={{ fontSize: 18, color: '#94a3b8' }} />
+            </InputAdornment>
+          ),
+        },
       }}
     />
   );
