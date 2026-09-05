@@ -11,13 +11,20 @@ import EmployeeLeads from './pages/EmployeeLeads/EmployeeLeads';
 import Profile from './pages/profile/Profile';
 import { useSelector } from 'react-redux';
 import { selectAuthState } from './app/auth/authSlice';
-import { selectDarkMode } from './app/theme/themeSlice';
+import { selectDarkMode, selectFontFamily, selectFontSize, selectPrimaryColor } from './app/theme/themeSlice';
 import { getAppTheme } from './theme';
 
 function App() {
   const { user } = useSelector(selectAuthState);
   const isDarkMode = useSelector(selectDarkMode);
-  const theme = useMemo(() => getAppTheme(isDarkMode ? 'dark' : 'light'), [isDarkMode]);
+  const fontFamily = useSelector(selectFontFamily);
+  const fontSize = useSelector(selectFontSize);
+  const primaryColor = useSelector(selectPrimaryColor);
+
+  const theme = useMemo(
+    () => getAppTheme(isDarkMode ? 'dark' : 'light', { fontFamily, fontSize, primaryColor }),
+    [isDarkMode, fontFamily, fontSize, primaryColor]
+  );
   const isAdmin = user?.role === 'ADMIN';
 
   return (

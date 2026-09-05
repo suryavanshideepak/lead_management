@@ -19,11 +19,13 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logoutAction, selectAuthState } from '../../app/auth/authSlice';
 import { toggleDarkMode, selectDarkMode } from '../../app/theme/themeSlice';
 import { persistor } from '../../app/store';
+import UiPreferenceModal from '../Modals/UiPreferenceModal';
 
 const Navbar = ({ toggle, title = '' }) => {
   const { isOpen } = useSelector((state) => state.user);
@@ -33,6 +35,7 @@ const Navbar = ({ toggle, title = '' }) => {
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [prefModalOpen, setPrefModalOpen] = useState(false);
   const openMenu = Boolean(anchorEl);
 
   const handleMenuOpen = (event) => {
@@ -59,86 +62,125 @@ const Navbar = ({ toggle, title = '' }) => {
   const initial = user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U';
 
   return (
-    <AppBar
-      elevation={0}
-      sx={{
-        position: 'fixed',
-        left: isOpen ? '250px' : '56px',
-        right: 0,
-        width: 'auto',
-        transition: 'left 0.3s ease',
-        borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-        backgroundColor: 'background.paper',
-      }}
-    >
-      <Toolbar sx={{ backgroundColor: 'background.paper', color: 'text.primary', display: 'flex', justifyContent: 'space-between' }}>
-        <Box display="flex" alignItems="center">
-          <IconButton edge="start" color="inherit" onClick={toggle} sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap sx={{ fontWeight: 600, fontSize: '1.05rem', color: 'text.primary' }}>
-            {title}
-          </Typography>
-        </Box>
-
-        <Box display="flex" alignItems="center" gap={1.25}>
-          {/* Dark Mode Toggle Button */}
-          <Tooltip title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}>
-            <IconButton
-              onClick={() => dispatch(toggleDarkMode())}
-              size="small"
-              sx={{
-                width: 36,
-                height: 36,
-                borderRadius: '10px',
-                border: (theme) => `1px solid ${theme.palette.divider}`,
-                backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
-                color: isDarkMode ? '#fbbf24' : '#475569',
-                transition: 'all 0.25s ease',
-                '&:hover': {
-                  backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#f1f5f9',
-                  transform: 'rotate(15deg)',
-                },
-              }}
-            >
-              {isDarkMode ? (
-                <LightModeOutlinedIcon sx={{ fontSize: 20, color: '#fbbf24' }} />
-              ) : (
-                <DarkModeOutlinedIcon sx={{ fontSize: 20, color: '#475569' }} />
-              )}
+    <>
+      <AppBar
+        elevation={0}
+        sx={{
+          position: 'fixed',
+          left: isOpen ? '250px' : '56px',
+          right: 0,
+          width: 'auto',
+          transition: 'left 0.3s ease',
+          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          backgroundColor: 'background.paper',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+      >
+        <Toolbar
+          disableGutters
+          sx={{
+            minHeight: { xs: '48px', sm: '52px' },
+            height: { xs: '48px', sm: '52px' },
+            px: { xs: 1.5, sm: 2 },
+            backgroundColor: 'background.paper',
+            color: 'text.primary',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Box display="flex" alignItems="center">
+            <IconButton edge="start" color="inherit" onClick={toggle} size="small" sx={{ mr: 1.5, p: 0.75 }}>
+              <MenuIcon sx={{ fontSize: 20 }} />
             </IconButton>
-          </Tooltip>
+            <Typography variant="h6" noWrap sx={{ fontWeight: 600, fontSize: '0.95rem', color: 'text.primary' }}>
+              {title}
+            </Typography>
+          </Box>
 
-          {/* User Account Avatar */}
-          <Tooltip title="Account settings">
-            <IconButton
-              onClick={handleMenuOpen}
-              size="small"
-              sx={{
-                p: 0.5,
-                border: '2px solid transparent',
-                '&:hover': {
-                  borderColor: '#10b981',
-                },
-              }}
-              aria-controls={openMenu ? 'account-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={openMenu ? 'true' : undefined}
-            >
-              <Avatar
+          <Box display="flex" alignItems="center" gap={1}>
+            {/* UI Preference Icon Button */}
+            <Tooltip title="UI Preferences (Font & Typography)">
+              <IconButton
+                onClick={() => setPrefModalOpen(true)}
+                size="small"
                 sx={{
-                  width: 34,
-                  height: 34,
-                  backgroundColor: '#10b981',
-                  fontSize: '0.875rem',
-                  fontWeight: 600,
-                  color: '#ffffff',
+                  width: 32,
+                  height: 32,
+                  borderRadius: '8px',
+                  border: (theme) => `1px solid ${theme.palette.divider}`,
+                  backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.04)' : '#f8fafc',
+                  color: isDarkMode ? '#cbd5e1' : '#475569',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.09)' : '#f1f5f9',
+                    borderColor: (theme) => theme.palette.primary.main,
+                    color: (theme) => theme.palette.primary.main,
+                  },
                 }}
               >
-                {initial}
-              </Avatar>
-            </IconButton>
-          </Tooltip>
+                <TuneOutlinedIcon sx={{ fontSize: 17 }} />
+              </IconButton>
+            </Tooltip>
+
+            {/* Dark Mode Toggle Button */}
+            <Tooltip title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}>
+              <IconButton
+                onClick={() => dispatch(toggleDarkMode())}
+                size="small"
+                sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '8px',
+                  border: (theme) => `1px solid ${theme.palette.divider}`,
+                  backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.04)' : '#f8fafc',
+                  color: isDarkMode ? '#fbbf24' : '#475569',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.09)' : '#f1f5f9',
+                    transform: 'rotate(15deg)',
+                  },
+                }}
+              >
+                {isDarkMode ? (
+                  <LightModeOutlinedIcon sx={{ fontSize: 17, color: '#fbbf24' }} />
+                ) : (
+                  <DarkModeOutlinedIcon sx={{ fontSize: 17, color: '#475569' }} />
+                )}
+              </IconButton>
+            </Tooltip>
+
+            {/* User Account Avatar */}
+            <Tooltip title="Account settings">
+              <IconButton
+                onClick={handleMenuOpen}
+                size="small"
+                sx={{
+                  p: 0.25,
+                  borderRadius: '50%',
+                  border: '1.5px solid transparent',
+                  '&:hover': {
+                    borderColor: (theme) => theme.palette.primary.main,
+                  },
+                }}
+                aria-controls={openMenu ? 'account-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openMenu ? 'true' : undefined}
+              >
+                <Avatar
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    color: '#ffffff',
+                  }}
+                >
+                  {initial}
+                </Avatar>
+              </IconButton>
+            </Tooltip>
 
           <Menu
             anchorEl={anchorEl}
@@ -249,6 +291,22 @@ const Navbar = ({ toggle, title = '' }) => {
               />
             </MenuItem>
 
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                setPrefModalOpen(true);
+              }}
+              sx={{ py: 1 }}
+            >
+              <ListItemIcon sx={{ minWidth: 32 }}>
+                <TuneOutlinedIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+              </ListItemIcon>
+              <ListItemText
+                primary="UI Preferences"
+                primaryTypographyProps={{ fontSize: '0.85rem', fontWeight: 500 }}
+              />
+            </MenuItem>
+
             <Divider sx={{ my: 0.5, borderColor: 'divider' }} />
 
             <MenuItem onClick={handleLogout} sx={{ color: '#ef4444', py: 1 }}>
@@ -261,6 +319,13 @@ const Navbar = ({ toggle, title = '' }) => {
         </Box>
       </Toolbar>
     </AppBar>
+
+    {/* UI Preferences Modal */}
+    <UiPreferenceModal
+      open={prefModalOpen}
+      onClose={() => setPrefModalOpen(false)}
+    />
+  </>
   );
 };
 

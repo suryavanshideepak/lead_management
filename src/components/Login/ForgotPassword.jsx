@@ -1,4 +1,4 @@
-import { Box, Button, Container, TextField } from '@mui/material'
+import { Box, Button, Container, TextField, CircularProgress } from '@mui/material'
 import { Field, Form, Formik } from 'formik';
 import React, { useState } from 'react'
 import { checkPasswordValidation } from '../../utils/validation';
@@ -11,19 +11,31 @@ import Toaster from '../../containers/Toaster';
 const ForgotPassword = () => {
     const dispatch = useDispatch()
     const [isEmail, setIsEmail]= useState('')
+    const [loading, setLoading] = useState(false)
     const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
     const submitEmail = (value) => {
         setIsEmail(value.email)
     }
-    const handleUpdatePassword = (values) => {
+    const handleUpdatePassword = async (values) => {
+        if (loading) return;
         const { oldPassword, newPassword } = values;
         const payload = {
             email:isEmail,
             oldPassword:oldPassword,
             newPassword:newPassword
         }
-        dispatch(forgotPassword(payload)).unwrap().then()
-        .catch((err) => setToast({ open: true, message: err.message || "Something went wrong", severity: 'error' }))
+        setLoading(true);
+        try {
+            await dispatch(forgotPassword(payload)).unwrap();
+            setToast({ open: true, message: "Password updated successfully", severity: "success" });
+            setTimeout(() => {
+                dispatch(handleForgot(false));
+            }, 1500);
+        } catch (err) {
+            setToast({ open: true, message: err.message || (typeof err === 'string' ? err : "Something went wrong"), severity: 'error' });
+        } finally {
+            setLoading(false);
+        }
     }
     return (
         <Container maxWidth="sm" sx={{ padding: { xs: '16px', sm: '24px' } }}>
@@ -107,13 +119,31 @@ const ForgotPassword = () => {
                         type="submit"
                         fullWidth
                         size="large"
+                        disabled={loading}
                         sx={{
                             marginTop: '20px',
                             backgroundImage: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)',
                             fontSize: { xs: '14px', sm: '16px' },
+                            fontWeight: 600,
+                            textTransform: 'none',
+                            height: 48,
+                            pointerEvents: loading ? 'none' : 'auto',
+                            '&.Mui-disabled': {
+                                color: '#ffffff',
+                                backgroundImage: 'linear-gradient(-60deg, #16a085 0%, #f4d03f 100%)',
+                                opacity: 0.7,
+                                cursor: 'not-allowed',
+                            }
                         }}
                     >
-                        Update Password
+                        {loading ? (
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1.5 }}>
+                                <CircularProgress size={22} sx={{ color: '#ffffff' }} thickness={4} />
+                                <span>Updating...</span>
+                            </Box>
+                        ) : (
+                            'Update Password'
+                        )}
                     </Button>
                 </Form>
             )}

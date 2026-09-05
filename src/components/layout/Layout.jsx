@@ -22,9 +22,9 @@ const Layout = ({ title = 'Dashboard', children }) => {
         sx={{
           flexGrow: 1,
           minWidth: 0,
-          height: 'calc(100vh - 64px)',
-          maxHeight: 'calc(100vh - 64px)',
-          mt: '64px',
+          height: { xs: 'calc(100vh - 48px)', sm: 'calc(100vh - 52px)' },
+          maxHeight: { xs: 'calc(100vh - 48px)', sm: 'calc(100vh - 52px)' },
+          mt: { xs: '48px', sm: '52px' },
           px: { xs: 1.5, sm: 2, md: 2.5 },
           py: { xs: 1, sm: 1.25, md: 1.5 },
           boxSizing: 'border-box',

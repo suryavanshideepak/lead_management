@@ -17,7 +17,9 @@ export const loginAction = createAsyncThunk(
 
 const initialState = {
     user: null,
-    token: ''
+    token: '',
+    isLoading: false,
+    error: null
 }
 
 export const authSlice = createSlice({
@@ -40,16 +42,29 @@ export const authSlice = createSlice({
             return {
                 ...state, 
                 token : '',
-                user: null
+                user: null,
+                isLoading: false,
+                error: null
             }
         }
 
     },
     extraReducers: (builder) => {
-        builder.addCase(loginAction.fulfilled,(state, action) => {
-            state.token = action.payload?.accessToken
-            state.user = action.payload?.userInfo
-        })
+        builder
+            .addCase(loginAction.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(loginAction.fulfilled,(state, action) => {
+                state.isLoading = false;
+                state.token = action.payload?.accessToken;
+                state.user = action.payload?.userInfo;
+                state.error = null;
+            })
+            .addCase(loginAction.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || action.error?.message;
+            });
     }
 })
 
